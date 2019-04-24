@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Compress Image</string>
+    <string name="open_unable">Cannot open file</string>
+    <plurals name="itemAmount">
+        <item quantity="zero">%d items</item>
+        <item quantity="one">1 item</item>
+        <item quantity="other">%d items</item>
+    </plurals>
+</resources>
