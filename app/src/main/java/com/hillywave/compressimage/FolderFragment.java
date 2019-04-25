@@ -1,14 +1,11 @@
 package com.hillywave.compressimage;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
@@ -18,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +28,7 @@ import java.util.List;
 public class FolderFragment extends Fragment {
     private static final String PARAMETER_FOLDER_PATH = "folder.path";
 
-    private MainActivity mainActivity;
+    private SelectFilesActivity selectFilesActivity;
     private SwipeRefreshLayout swipeContainer;
     String TAG = "FolderFragment";
     private ListView listView;
@@ -52,7 +48,7 @@ public class FolderFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        mainActivity = (MainActivity) context;
+        selectFilesActivity = (SelectFilesActivity) context;
     }
 
     @Override
@@ -77,21 +73,23 @@ public class FolderFragment extends Fragment {
             swipeContainer.setRefreshing(false);
         });
 
-        adapter = new FolderAdapter(mainActivity);
+        adapter = new FolderAdapter(selectFilesActivity);
 
         listView.setAdapter(adapter);
 
 
-
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            Log.d(TAG, "onActivityCreated: Parent: " + parent );
-            Log.d(TAG, "onActivityCreated: View: " + view );
-            Log.d(TAG, "onActivityCreated: Position: " + position );
-            Log.d(TAG, "onActivityCreated: Id: " + id );
             FileInfo fileInfo = (FileInfo) parent.getItemAtPosition(position);
-
             if (adapter.isSelectionMode()) {
-                adapter.updateSelection(fileInfo.toggleSelection());
+                if (fileInfo.isDirectory() || fileInfo.isImage()) {
+                    adapter.updateSelection(fileInfo.toggleSelection());
+                    selectFilesActivity.addElement(fileInfo);
+                }
+                Log.d(TAG, "onActivityCreated: " + fileInfo);
+                Log.d(TAG, "onActivityCreated: " + fileInfo.path());
+                Log.d(TAG, "onActivityCreated: " + fileInfo.name());
+                Log.d(TAG, "onActivityCreated: " + fileInfo.isDirectory());
+                Log.d(TAG, "onActivityCreated: " + fileInfo.isImage());
             } else {
                 if (fileInfo.isDirectory()) {
                     openFolder(fileInfo);
@@ -103,8 +101,15 @@ public class FolderFragment extends Fragment {
 
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
             FileInfo fileInfo = (FileInfo) parent.getItemAtPosition(position);
-            adapter.updateSelection(fileInfo.toggleSelection());
-
+            Log.d(TAG, "onActivityCreated: " + fileInfo);
+            Log.d(TAG, "onActivityCreated: " + fileInfo.path());
+            Log.d(TAG, "onActivityCreated: " + fileInfo.name());
+            Log.d(TAG, "onActivityCreated: " + fileInfo.isDirectory());
+            Log.d(TAG, "onActivityCreated: " + fileInfo.isImage());
+            if (fileInfo.isDirectory() || fileInfo.isImage()) {
+                adapter.updateSelection(fileInfo.toggleSelection());
+                selectFilesActivity.addElement(fileInfo);
+            }
             return true;
         });
 
@@ -134,7 +139,6 @@ public class FolderFragment extends Fragment {
     private void unselectAll() {
         adapter.unselectAll();
     }
-
 
 
     public String folderName() {
@@ -192,7 +196,7 @@ public class FolderFragment extends Fragment {
     private void openFolder(FileInfo fileInfo) {
         FolderFragment folderFragment = FolderFragment.newInstance(fileInfo.path());
 
-        mainActivity.addFragment(folderFragment, true);
+        selectFilesActivity.addFragment(folderFragment, true);
     }
 
     private void openFile(FileInfo fileInfo) {
@@ -256,7 +260,6 @@ public class FolderFragment extends Fragment {
 //            }
 //        }.execute();
     }
-
 
 
     private void createFolder(String name) {
@@ -341,12 +344,11 @@ public class FolderFragment extends Fragment {
     }
 
     private boolean isResolvable(Intent intent) {
-        PackageManager manager = mainActivity.getPackageManager();
+        PackageManager manager = selectFilesActivity.getPackageManager();
         List<ResolveInfo> resolveInfo = manager.queryIntentActivities(intent, 0);
 
         return !resolveInfo.isEmpty();
     }
-
 
 
 }

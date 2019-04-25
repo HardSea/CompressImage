@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 
 import java.io.Closeable;
 import java.io.File;
@@ -13,12 +14,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.lang.ref.SoftReference;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileInfo {
+public class FileInfo implements Serializable {
     private final File file;
 
     private String cachedName = null;
@@ -32,7 +34,7 @@ public class FileInfo {
     private Boolean cachedIsVideo = null;
     private Boolean cachedIsDirectory = null;
     private Integer cachedNumberOfChildren = null;
-    private SoftReference<Bitmap> cachedBitmap;
+    private transient SoftReference<Bitmap> cachedBitmap;
     private boolean isSelected = false;
 
     public FileInfo(File file) {
@@ -304,7 +306,12 @@ public class FileInfo {
     }
 
     public boolean hasCachedBitmap() {
-        return (cachedBitmap.get() != null);
+        if (cachedBitmap != null)
+            return (cachedBitmap.get() != null);
+        else {
+            this.cachedBitmap = new SoftReference<>(null);
+            return (cachedBitmap.get() != null);
+        }
     }
 
     public Bitmap bitmap(int maxSize) {

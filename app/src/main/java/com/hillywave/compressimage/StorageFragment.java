@@ -14,7 +14,7 @@ public class StorageFragment extends Fragment {
 
     public static final String PARAMETER_STORAGES_PATH = "storages.path";
 
-    private MainActivity mainActivity;
+    private SelectFilesActivity selectFilesActivity;
     private ListView listView;
     private StorageAdapter adapter;
 
@@ -32,7 +32,7 @@ public class StorageFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        mainActivity = (MainActivity) context;
+        selectFilesActivity = (SelectFilesActivity) context;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class StorageFragment extends Fragment {
     {
         super.onActivityCreated(savedInstanceState);
 
-        adapter = new StorageAdapter(mainActivity);
+        adapter = new StorageAdapter(selectFilesActivity);
 
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((parent, view, position, id) -> {
@@ -77,7 +77,7 @@ public class StorageFragment extends Fragment {
     {
         FolderFragment folderFragment = FolderFragment.newInstance(storagePath);
 
-        mainActivity.addFragment(folderFragment, true);
+        selectFilesActivity.addFragment(folderFragment, true);
     }
 
     @Override

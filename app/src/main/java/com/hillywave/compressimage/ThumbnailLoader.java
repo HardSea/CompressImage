@@ -2,6 +2,7 @@ package com.hillywave.compressimage;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -22,6 +23,7 @@ public class ThumbnailLoader {
     }
 
     public void load(final FileInfo fileInfo, final ImageView imageView) {
+
 
         if (fileInfo.hasCachedBitmap()) {
             imageView.setImageBitmap(fileInfo.bitmap(maxSize));
