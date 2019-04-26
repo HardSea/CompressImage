@@ -53,7 +53,7 @@ public class SelectFilesActivity extends AppCompatActivity {
     private final Stack<FolderFragment> fragments = new Stack<>();
     private Toolbar toolBar;
 
-    public static final int GALLERY = 1;
+    public static final int GALLERY = 123;
     public static final int REQUEST_CODE_STORAGE_ACCESS = 42;
 
     private ImageView imageView;
@@ -255,13 +255,13 @@ public class SelectFilesActivity extends AppCompatActivity {
 
 
     public void testBtn(View view) {
-        //Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-        Intent galleryIntent = new Intent();
-        galleryIntent.setType("image/*");
-        galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+       // Intent galleryIntent = new Intent();
+       // galleryIntent.setType("image/*");
+       // galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(galleryIntent, "Select picture"), GALLERY);
+        startActivityForResult(Intent.createChooser(galleryIntent, "Select folder"), GALLERY);
 
     }
 
