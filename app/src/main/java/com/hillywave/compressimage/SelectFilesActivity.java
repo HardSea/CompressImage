@@ -59,7 +59,7 @@ public class SelectFilesActivity extends AppCompatActivity {
     private ImageView imageView;
     public String CAMERA_IMAGE_BUCKET_NAME;
     public String CAMERA_IMAGE_BUCKET_ID;
-    //private String IMAGE_DIRECTORY = "/testfolder";
+    private String IMAGE_DIRECTORY = "/testfolder";
     private ArrayList imagesEncodedList;
     private String imageEncoded;
     private ArrayList<FileInfo> listPathSelected;
@@ -129,7 +129,13 @@ public class SelectFilesActivity extends AppCompatActivity {
     }
 
     void addElement(FileInfo info){
+        Log.d(TAG, "removeElement: addElement");
         listPathSelected.add(info);
+    }
+
+    void removeElement(FileInfo info){
+        Log.d(TAG, "removeElement: removeElement");
+        listPathSelected.remove(info);
     }
 
     private String[] storages() {
@@ -509,6 +515,7 @@ public class SelectFilesActivity extends AppCompatActivity {
             Log.d(TAG, "saveImage: URL " + url);
             File f = new Compressor(this).setDestinationDirectoryPath(url + "/download").compressToFile(myFile, myFile.getName());
             // Files.setLastModifiedTime(myFile.getPath(), new FileTime(484984984));
+
             Log.d(TAG, "saveImage: " + f.setLastModified(System.currentTimeMillis() - 21802245000L));
             Log.d(TAG, "saveImage: " + System.currentTimeMillis());
             Log.d(TAG, "saveImage: " + f.lastModified());

@@ -83,7 +83,10 @@ public class FolderFragment extends Fragment {
             if (adapter.isSelectionMode()) {
                 if (fileInfo.isDirectory() || fileInfo.isImage()) {
                     adapter.updateSelection(fileInfo.toggleSelection());
-                    selectFilesActivity.addElement(fileInfo);
+                    if (fileInfo.isSelected())
+                        selectFilesActivity.addElement(fileInfo);
+                    else
+                        selectFilesActivity.removeElement(fileInfo);
                 }
                 Log.d(TAG, "onActivityCreated: " + fileInfo);
                 Log.d(TAG, "onActivityCreated: " + fileInfo.path());

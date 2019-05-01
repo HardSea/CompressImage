@@ -6,4 +6,9 @@
         <item quantity="one">1 item</item>
         <item quantity="other">%d items</item>
     </plurals>
+    <string-array name="format_names">
+        <item>JPEG</item>
+        <item>PNG</item>
+        <item>WEBP</item>
+    </string-array>
 </resources>
