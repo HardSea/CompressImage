@@ -95,6 +95,8 @@ public class FolderFragment extends Fragment {
                 Log.d(TAG, "onActivityCreated: " + fileInfo.isImage());
             } else {
                 if (fileInfo.isDirectory()) {
+
+                    //selectFilesActivity.setFileFolder(folderName());
                     openFolder(fileInfo);
                 } else {
                     openFile(fileInfo);

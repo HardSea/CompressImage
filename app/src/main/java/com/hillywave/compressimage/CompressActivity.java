@@ -36,6 +36,7 @@ public class CompressActivity extends AppCompatActivity {
     public static final int FOLDER_REQUEST = 342;
     private EditText editTextSaveFolder;
     private File saveDirectory;
+    private String folderSaveName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class CompressActivity extends AppCompatActivity {
         saveDirectory = new File(Environment.getExternalStorageDirectory() + SAVE_DIRECTORY);
 
         editTextSaveFolder = findViewById(R.id.editTextSaveFolder);
+        editTextSaveFolder.setOnClickListener(view -> btnSelectFolder());
 
         editTextSaveFolder.setText(saveDirectory.getPath());
 
@@ -89,7 +91,7 @@ public class CompressActivity extends AppCompatActivity {
         listOfFiles = (ArrayList<FileInfo>) intent.getSerializableExtra("listoffiles");
 
         Button btnSelectFolder = findViewById(R.id.btnSelectFolder);
-        btnSelectFolder.setOnClickListener(v -> testBtn());
+        btnSelectFolder.setOnClickListener(v -> btnSelectFolder());
 
         Log.d(TAG, "onCreate: " + cntRow());
 
@@ -146,16 +148,10 @@ public class CompressActivity extends AppCompatActivity {
         return (int) ((width - 40) / 125);
     }
 
-    public void testBtn() {
-//       // Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-//        // Intent galleryIntent = new Intent();
-//        intent.setType("*");
-//        // galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(Intent.createChooser(intent, "Select folder"), FOLDER);
+    public void btnSelectFolder() {
         Intent i = new Intent(this, SelectFilesActivity.class);
-        startActivityForResult(i, 1);
+        i.putExtra("request_code", 11);
+        startActivityForResult(i, 11);
 
 
     }
@@ -172,6 +168,11 @@ public class CompressActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, CompressActivity.class);
                 intent.putExtra("listoffiles", listSelected);
                 startActivity(intent);
+            } else if(requestCode == 11){
+                // TODO выбрать ссылку для сохранения
+                folderSaveName = data.getStringExtra("resultNameFolder");
+                editTextSaveFolder.setText(folderSaveName);
+
             }
 
         } else if (resultCode == Activity.RESULT_CANCELED) {

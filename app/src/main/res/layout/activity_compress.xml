@@ -68,6 +68,7 @@
             android:ems="5"
             android:focusable="false"
             android:inputType="none"
+            android:maxLines="2"
             android:longClickable="false" />
 
     </LinearLayout>

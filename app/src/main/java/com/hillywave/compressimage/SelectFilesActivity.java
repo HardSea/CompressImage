@@ -63,6 +63,8 @@ public class SelectFilesActivity extends AppCompatActivity {
     private ArrayList imagesEncodedList;
     private String imageEncoded;
     private ArrayList<FileInfo> listPathSelected;
+    private int requestCode;
+    private String folderSaveName;
     String TAG = "MainActivity";
 
     @Override
@@ -77,11 +79,25 @@ public class SelectFilesActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         Button btnSelectImage = toolBar.findViewById(R.id.btnSelect);
 
+        Intent i = getIntent();
+        requestCode = i.getIntExtra("request_code", 1);
+
         btnSelectImage.setOnClickListener(view -> {
-            Intent resultIntent = new Intent();
-            resultIntent.putExtra("result", listPathSelected);
-            setResult(Activity.RESULT_OK, resultIntent);
-            finish();
+
+            if (requestCode == 1) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("result", listPathSelected);
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
+            } else if (requestCode == 11) {
+                // TODO выбрать папку для сохранения
+                Toast.makeText(getApplicationContext(), folderSaveName, Toast.LENGTH_SHORT).show();
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("resultNameFolder", folderSaveName);
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
+            }
+
         });
 
         if (!checkPermissionForWriteExtertalStorage()) {
@@ -96,8 +112,7 @@ public class SelectFilesActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: STORAGES " + storages);
 
 
-        if (storages.length > 1)
-        {
+        if (storages.length > 1) {
             storageFragment = StorageFragment.newInstance(storages);
 
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -108,9 +123,7 @@ public class SelectFilesActivity extends AppCompatActivity {
             transaction.addToBackStack(null);
             transaction.commitAllowingStateLoss();
 
-        }
-        else
-        {
+        } else {
             String root = Environment.getExternalStorageDirectory().getAbsolutePath();
             FolderFragment folderFragment = FolderFragment.newInstance(root);
 
@@ -128,15 +141,16 @@ public class SelectFilesActivity extends AppCompatActivity {
 
     }
 
-    void addElement(FileInfo info){
+    void addElement(FileInfo info) {
         Log.d(TAG, "removeElement: addElement");
         listPathSelected.add(info);
     }
 
-    void removeElement(FileInfo info){
+    void removeElement(FileInfo info) {
         Log.d(TAG, "removeElement: removeElement");
         listPathSelected.remove(info);
     }
+
 
     private String[] storages() {
         List<String> storages = new ArrayList<>();
@@ -186,32 +200,30 @@ public class SelectFilesActivity extends AppCompatActivity {
         }
     }
 
-    public void addFragment(FolderFragment fragment, boolean addToBackStack)
-    {
+    public void addFragment(FolderFragment fragment, boolean addToBackStack) {
         fragments.push(fragment);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        if (addToBackStack)
-        {
+        if (addToBackStack) {
             transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right);
         }
 
         transaction.add(R.id.fragmentContainer, fragment);
 
-        if (addToBackStack)
-        {
+        if (addToBackStack) {
             transaction.addToBackStack(null);
         }
 
         transaction.commitAllowingStateLoss();
 
+        folderSaveName = fragment.folderName();
+
     }
 
-    private void removeFragment(FolderFragment fragment)
-    {
+    private void removeFragment(FolderFragment fragment) {
         fragments.pop();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -221,16 +233,36 @@ public class SelectFilesActivity extends AppCompatActivity {
         transaction.remove(fragment);
         transaction.commitAllowingStateLoss();
 
-        if (!fragments.isEmpty())
-        {
+        if (!fragments.isEmpty()) {
             FolderFragment topFragment = fragments.peek();
             topFragment.refreshFolder();
 
+            Log.d(TAG, "onBackPressed: fragment.folderName()" );
+            folderSaveName = topFragment.folderName();
         }
+
     }
 
+    @Override
+    public void onBackPressed() {
+        if (fragments.size() > 0) {
+            FolderFragment fragment = fragments.peek();
 
-
+            if (fragment.onBackPressed()) {
+                if (storageFragment == null) {
+                    if (fragments.size() > 1) {
+                        removeFragment(fragment);
+                    } else {
+                        finish();
+                    }
+                } else {
+                    removeFragment(fragment);
+                }
+            }
+        } else {
+            finish();
+        }
+    }
 
     public List<String> getCameraImages(Context context) {
         final String[] projection = {MediaStore.Images.Media.DATA};
@@ -263,9 +295,9 @@ public class SelectFilesActivity extends AppCompatActivity {
     public void testBtn(View view) {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-       // Intent galleryIntent = new Intent();
-       // galleryIntent.setType("image/*");
-       // galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        // Intent galleryIntent = new Intent();
+        // galleryIntent.setType("image/*");
+        // galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(galleryIntent, "Select folder"), GALLERY);
 

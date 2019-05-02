@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.btnCompress:
                 Intent i = new Intent(this, SelectFilesActivity.class);
+                i.putExtra("request_code", 1);
                 startActivityForResult(i, 1);
 
                 break;
