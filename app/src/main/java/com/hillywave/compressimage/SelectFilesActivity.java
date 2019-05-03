@@ -31,6 +31,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -40,6 +41,7 @@ import java.lang.ref.SoftReference;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
@@ -78,19 +80,33 @@ public class SelectFilesActivity extends AppCompatActivity {
         setSupportActionBar(toolBar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         Button btnSelectImage = toolBar.findViewById(R.id.btnSelect);
+        TextView textViewToolBar = findViewById(R.id.toolBarText);
+
 
         Intent i = getIntent();
         requestCode = i.getIntExtra("request_code", 1);
+        if (requestCode == 1){
+            textViewToolBar.setText("Виберіть зображення");
+        } else if (requestCode == 11){
+            textViewToolBar.setText("Виберіть папку");
+
+        }
 
         btnSelectImage.setOnClickListener(view -> {
 
             if (requestCode == 1) {
+                //             if(listPathSelected.size() > 0){
+
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("result", listPathSelected);
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
+
+                //              } else {
+                //TODO КНОПКА ВЫБРАТЬ Toast.makeText(getApplicationContext(), "Необхідно вибрати фото довгим натисненням", Toast.LENGTH_SHORT).show();
+                //              }
+
             } else if (requestCode == 11) {
-                // TODO выбрать папку для сохранения
                 Toast.makeText(getApplicationContext(), folderSaveName, Toast.LENGTH_SHORT).show();
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("resultNameFolder", folderSaveName);
@@ -109,7 +125,6 @@ public class SelectFilesActivity extends AppCompatActivity {
         }
 
         String[] storages = storages();
-        Log.d(TAG, "onCreate: STORAGES " + storages);
 
 
         if (storages.length > 1) {
@@ -142,12 +157,10 @@ public class SelectFilesActivity extends AppCompatActivity {
     }
 
     void addElement(FileInfo info) {
-        Log.d(TAG, "removeElement: addElement");
         listPathSelected.add(info);
     }
 
     void removeElement(FileInfo info) {
-        Log.d(TAG, "removeElement: removeElement");
         listPathSelected.remove(info);
     }
 
@@ -156,11 +169,31 @@ public class SelectFilesActivity extends AppCompatActivity {
         List<String> storages = new ArrayList<>();
 
         try {
+
             File[] externalStorageFiles = ContextCompat.getExternalFilesDirs(this, null);
 
             String base = String.format("/Android/data/%s/files", getPackageName());
 
-            for (File file : externalStorageFiles) {
+            if (requestCode != 11) {
+                for (File file : externalStorageFiles) {
+                    try {
+                        if (file != null) {
+                            String path = file.getAbsolutePath();
+
+                            if (path.contains(base)) {
+                                String finalPath = path.replace(base, "");
+
+                                if (validPath(finalPath)) {
+                                    storages.add(finalPath);
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else if (requestCode == 11){
+                File file = externalStorageFiles[0];
                 try {
                     if (file != null) {
                         String path = file.getAbsolutePath();
@@ -177,6 +210,8 @@ public class SelectFilesActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -237,7 +272,6 @@ public class SelectFilesActivity extends AppCompatActivity {
             FolderFragment topFragment = fragments.peek();
             topFragment.refreshFolder();
 
-            Log.d(TAG, "onBackPressed: fragment.folderName()" );
             folderSaveName = topFragment.folderName();
         }
 
@@ -327,14 +361,8 @@ public class SelectFilesActivity extends AppCompatActivity {
                             Uri uri = item.getUri();
                             mArrayUri.add(uri);
                         }
-                        Log.d(TAG, "Selected Images " + mArrayUri.size());
                         for (int i = 0; i < mArrayUri.size(); i++) {
-                            Log.d(TAG, "Selected Images " + i + " " + mArrayUri.get(i));
-                        }
-                        Log.d(TAG, "onActivityResult: " + getPath(getApplicationContext(), mArrayUri.get(0)));
-
-                        for (int i = 0; i < mArrayUri.size(); i++) {
-                            saveImage(new File(Objects.requireNonNull(getPath(getApplicationContext(), mArrayUri.get(i)))));
+                            //saveImage(new File(Objects.requireNonNull(getPath(getApplicationContext(), mArrayUri.get(i)))));
                         }
 
                     }
@@ -344,13 +372,10 @@ public class SelectFilesActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
 
                     Uri treeUri = data.getData();
-                    Log.d(TAG, "onActivityResult: treeUri" + treeUri);
-                    Log.d(TAG, "onActivityResult: treeUri to string" + treeUri.toString());
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString("content_url", treeUri.toString());
                     editor.apply();
-                    Log.d(TAG, "onActivityResult: SAVED");
                     // Persist URI - this is required for verification of writability.
                     // PreferenceUtil.setSharedPreferenceUri(preferenceKeyUri, treeUri);
                     DocumentFile pickedDir = DocumentFile.fromTreeUri(this, treeUri);
@@ -524,55 +549,6 @@ public class SelectFilesActivity extends AppCompatActivity {
     }
 
 
-    public String saveImage(File myFile) {
-        // myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        Log.d(TAG, "saveImage: PATH " + myFile.getPath());
-        //String[] path = myFile.getPath().split("/");
-        Log.d(TAG, "saveImage: NEW PATH " + useSplitToRemoveLastPart(myFile.getPath()));
-
-        //File wallpaperDirectory = new File(Environment.getExternalStorageDirectory() + IMAGE_DIRECTORY);
-        File wallpaperDirectory = new File(useSplitToRemoveLastPart(myFile.getPath()));
-        Log.d(TAG, "saveImage: exists " + wallpaperDirectory.exists());
-
-        if (!wallpaperDirectory.exists()) {
-            Log.d(TAG, "saveImage: mkdirs " + wallpaperDirectory.mkdirs());
-        }
-
-        try {
-            //File f = new File(wallpaperDirectory, fileName);
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_STORAGE_ACCESS);
-            //File f = new Compressor(this).setDestinationDirectoryPath(wallpaperDirectory.getPath()).compressToFile(myFile, myFile.getName());
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            String url = prefs.getString("content_url", "");
-            Log.d(TAG, "saveImage: URL " + url);
-            File f = new Compressor(this).setDestinationDirectoryPath(url + "/download").compressToFile(myFile, myFile.getName());
-            // Files.setLastModifiedTime(myFile.getPath(), new FileTime(484984984));
-
-            Log.d(TAG, "saveImage: " + f.setLastModified(System.currentTimeMillis() - 21802245000L));
-            Log.d(TAG, "saveImage: " + System.currentTimeMillis());
-            Log.d(TAG, "saveImage: " + f.lastModified());
-            //f.createNewFile();
-            //FileOutputStream fo = new FileOutputStream(f);
-            //MediaScannerConnection.scanFile(this,
-            //         new String[]{f.getPath()},
-            //        new String[]{"image/jpeg"}, null);
-            //fo.close();
-            Log.d(TAG, "File Saved--->" + f.getAbsolutePath());
-
-            return f.getAbsolutePath();
-        } catch (FileNotFoundException e) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-                startActivityForResult(intent, REQUEST_CODE_STORAGE_ACCESS);
-            }
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-
     public void requestPermissionForWriteExtertalStorage() {
         try {
             int READ_STORAGE_PERMISSION_REQUEST_CODE = 1;
@@ -583,7 +559,7 @@ public class SelectFilesActivity extends AppCompatActivity {
         }
     }
 
-    private static String useSplitToRemoveLastPart(String str) {
+    static String useSplitToRemoveLastPart(String str) {
         String[] arr = str.split("/");
         String result = "";
         if (arr.length > 0) {

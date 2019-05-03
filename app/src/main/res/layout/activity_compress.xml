@@ -30,6 +30,14 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textViewCntImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:maxLines="1"
+        tools:text="TextView" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -97,11 +105,11 @@
                 android:id="@+id/textViewCompressQuality"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:fontFamily="sans-serif-black"
-                android:text="75"
-                android:textSize="17sp"
-                android:textColor="#111" />
+                android:gravity="center"
+                android:text="80"
+                android:textColor="#111"
+                android:textSize="17sp" />
         </LinearLayout>
 
 
@@ -110,7 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:max="100"
-            android:progress="75" />
+            android:progress="80" />
     </LinearLayout>
 
     <LinearLayout
@@ -138,12 +146,14 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btnCompress"
         android:layout_width="200dp"
         android:layout_height="70dp"
         android:textSize="18sp"
         android:layout_weight="1"
         android:textColor="#111"
         android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
         android:text="Стиснути" />
 
 </LinearLayout>

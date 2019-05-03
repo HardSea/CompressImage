@@ -88,11 +88,7 @@ public class FolderFragment extends Fragment {
                     else
                         selectFilesActivity.removeElement(fileInfo);
                 }
-                Log.d(TAG, "onActivityCreated: " + fileInfo);
-                Log.d(TAG, "onActivityCreated: " + fileInfo.path());
-                Log.d(TAG, "onActivityCreated: " + fileInfo.name());
-                Log.d(TAG, "onActivityCreated: " + fileInfo.isDirectory());
-                Log.d(TAG, "onActivityCreated: " + fileInfo.isImage());
+
             } else {
                 if (fileInfo.isDirectory()) {
 
@@ -106,11 +102,6 @@ public class FolderFragment extends Fragment {
 
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
             FileInfo fileInfo = (FileInfo) parent.getItemAtPosition(position);
-            Log.d(TAG, "onActivityCreated: " + fileInfo);
-            Log.d(TAG, "onActivityCreated: " + fileInfo.path());
-            Log.d(TAG, "onActivityCreated: " + fileInfo.name());
-            Log.d(TAG, "onActivityCreated: " + fileInfo.isDirectory());
-            Log.d(TAG, "onActivityCreated: " + fileInfo.isImage());
             if (fileInfo.isDirectory() || fileInfo.isImage()) {
                 adapter.updateSelection(fileInfo.toggleSelection());
                 selectFilesActivity.addElement(fileInfo);

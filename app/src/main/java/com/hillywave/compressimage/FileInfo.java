@@ -36,6 +36,7 @@ public class FileInfo implements Serializable {
     private Integer cachedNumberOfChildren = null;
     private transient SoftReference<Bitmap> cachedBitmap;
     private boolean isSelected = false;
+    private String TAG = ".CompressActivity";
 
     public FileInfo(File file) {
         this.file = file;
@@ -67,6 +68,10 @@ public class FileInfo implements Serializable {
         File newFile = new File(file.getParentFile(), newName);
 
         return !newFile.exists() && file.renameTo(newFile);
+    }
+
+    File getFIle(){
+        return file;
     }
 
     public boolean copy(FileInfo target, boolean delete) {
@@ -150,12 +155,36 @@ public class FileInfo implements Serializable {
         return file.delete();
     }
 
+    public ArrayList<FileInfo> getImages(){
+        ArrayList<FileInfo> tempArr = new ArrayList<>();
+        if (isDirectory()){
+            for (File currentFile : children()){
+                if (currentFile != null) {
+                    Log.d(TAG, "getImage: currentFile.isDirectory()" + currentFile.isDirectory());
+                    FileInfo fileInfo = new FileInfo(currentFile);
+                    Log.d(TAG, "getImage: (fileInfo.isImage()" + fileInfo.isImage());
+                    if (fileInfo.isImage()){
+                        tempArr.add(fileInfo);
+                    }
+                    if (fileInfo.isDirectory()){
+                        if (fileInfo.hasFiles()) {
+                            tempArr.addAll(fileInfo.getImages());
+                        }
+                    }
+
+                }
+            }
+            return tempArr;
+        } else {
+            return tempArr;
+        }
+    }
+
     public boolean hasFiles() {
         if (isDirectory()) {
             for (File currentFile : children()) {
                 if (currentFile != null) {
                     FileInfo fileInfo = new FileInfo(currentFile);
-
                     if (fileInfo.hasFiles()) {
                         return true;
                     }

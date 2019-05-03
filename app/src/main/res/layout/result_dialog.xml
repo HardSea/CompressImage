@@ -1,0 +1,60 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="25dp"
+    android:paddingEnd="25dp"
+    android:background="#ffffffff">
+
+
+    <TextView
+        android:id="@+id/text_dialog1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#ff000000"
+        android:textSize="16sp"
+        tools:text="Розмір до стиснення:" />
+
+    <TextView
+        android:id="@+id/text_dialog2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#ff000000"
+        android:textSize="16sp"
+        tools:text="Розмір до стиснення:" />
+
+    <TextView
+        android:id="@+id/text_dialog3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#ff000000"
+        android:textSize="16sp"
+        tools:text="Розмір до стиснення: 555.55 KB" />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Закрити"
+        android:layout_gravity="center"
+        android:id="@+id/btn_dialog"
+        android:layout_marginBottom="10dp"
+        android:textColor="#ffffffff" />
+
+</LinearLayout>
