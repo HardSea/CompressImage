@@ -65,7 +65,7 @@ public class SelectFilesActivity extends AppCompatActivity {
     private ArrayList imagesEncodedList;
     private String imageEncoded;
     private ArrayList<FileInfo> listPathSelected;
-    private int requestCode;
+    public int requestCode;
     private String folderSaveName;
     String TAG = "MainActivity";
 
@@ -85,9 +85,9 @@ public class SelectFilesActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         requestCode = i.getIntExtra("request_code", 1);
-        if (requestCode == 1){
+        if (requestCode == 1) {
             textViewToolBar.setText("Виберіть зображення");
-        } else if (requestCode == 11){
+        } else if (requestCode == 11) {
             textViewToolBar.setText("Виберіть папку");
 
         }
@@ -95,16 +95,14 @@ public class SelectFilesActivity extends AppCompatActivity {
         btnSelectImage.setOnClickListener(view -> {
 
             if (requestCode == 1) {
-                //             if(listPathSelected.size() > 0){
+                //if (listPathSelected.size() > 0) {
 
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("result", listPathSelected);
-                setResult(Activity.RESULT_OK, resultIntent);
-                finish();
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("result", listPathSelected);
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
 
-                //              } else {
-                //TODO КНОПКА ВЫБРАТЬ Toast.makeText(getApplicationContext(), "Необхідно вибрати фото довгим натисненням", Toast.LENGTH_SHORT).show();
-                //              }
+               // }
 
             } else if (requestCode == 11) {
                 Toast.makeText(getApplicationContext(), folderSaveName, Toast.LENGTH_SHORT).show();
@@ -160,6 +158,10 @@ public class SelectFilesActivity extends AppCompatActivity {
         listPathSelected.add(info);
     }
 
+    void removeAll() {
+        listPathSelected.clear();
+    }
+
     void removeElement(FileInfo info) {
         listPathSelected.remove(info);
     }
@@ -192,7 +194,7 @@ public class SelectFilesActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-            } else if (requestCode == 11){
+            } else if (requestCode == 11) {
                 File file = externalStorageFiles[0];
                 try {
                     if (file != null) {

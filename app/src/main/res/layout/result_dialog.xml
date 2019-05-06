@@ -45,6 +45,19 @@
         android:layout_gravity="center_horizontal"
         android:textColor="#ff000000"
         android:textSize="16sp"
+        tools:text="Розмір до стиснення:" />
+
+    <TextView
+        android:id="@+id/text_dialog4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#ff000000"
+        android:textSize="16sp"
         tools:text="Розмір до стиснення: 555.55 KB" />
 
 

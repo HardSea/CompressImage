@@ -91,11 +91,14 @@ public class FolderFragment extends Fragment {
 
             } else {
                 if (fileInfo.isDirectory()) {
-
-                    //selectFilesActivity.setFileFolder(folderName());
                     openFolder(fileInfo);
                 } else {
-                    openFile(fileInfo);
+                    if (selectFilesActivity.requestCode != 11) {
+                        if (fileInfo.isImage()) {
+                            adapter.updateSelection(fileInfo.toggleSelection());
+                            selectFilesActivity.addElement(fileInfo);
+                        }
+                    }
                 }
             }
         });
@@ -134,6 +137,7 @@ public class FolderFragment extends Fragment {
 
     private void unselectAll() {
         adapter.unselectAll();
+        selectFilesActivity.removeAll();
     }
 
 

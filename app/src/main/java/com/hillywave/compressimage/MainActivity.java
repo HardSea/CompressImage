@@ -47,12 +47,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.btnRotate:
-                Intent i2 = new Intent(this, CompressActivity.class);
+                Intent i2 = new Intent(this, SelectFilesActivity.class);
+                i2.putExtra("request_code", 1);
                 startActivityForResult(i2, 2);
 
                 break;
             case R.id.btnFormat:
                 Intent i3 = new Intent(this, SelectFilesActivity.class);
+                i3.putExtra("request_code", 1);
                 startActivityForResult(i3, 3);
 
                 break;
@@ -75,12 +77,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case 1:
-                    ArrayList<FileInfo> listSelected;
                     assert data != null;
-                    listSelected = (ArrayList<FileInfo>) data.getSerializableExtra("result");
+                    ArrayList<FileInfo> listSelected = (ArrayList<FileInfo>) data.getSerializableExtra("result");
                     Intent intent = new Intent(this, CompressActivity.class);
                     intent.putExtra("listoffiles", listSelected);
                     startActivity(intent);
+                    break;
+
+                case 2:
+                    assert data != null;
+                    listSelected = (ArrayList<FileInfo>) data.getSerializableExtra("result");
+                    intent = new Intent(this, RotationActivity.class);
+                    intent.putExtra("listoffiles", listSelected);
+                    startActivity(intent);
+                    break;
+
+                case 3:
+                    assert data != null;
+                    listSelected = (ArrayList<FileInfo>) data.getSerializableExtra("result");
+                    intent = new Intent(this, FormatActivity.class);
+                    intent.putExtra("listoffiles", listSelected);
+                    startActivity(intent);
+
                     break;
 
                 default:

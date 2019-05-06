@@ -6,14 +6,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
 
-import java.io.Closeable;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.ref.SoftReference;
 import java.net.URLConnection;
@@ -34,6 +28,7 @@ public class FileInfo implements Serializable {
     private Boolean cachedIsVideo = null;
     private Boolean cachedIsDirectory = null;
     private Integer cachedNumberOfChildren = null;
+    private String cachedImageFormat = null;
     private transient SoftReference<Bitmap> cachedBitmap;
     private boolean isSelected = false;
     private String TAG = ".CompressActivity";
@@ -60,109 +55,17 @@ public class FileInfo implements Serializable {
         return result;
     }
 
-    public boolean exists() {
-        return file.exists();
-    }
-
-    public boolean rename(String newName) {
-        File newFile = new File(file.getParentFile(), newName);
-
-        return !newFile.exists() && file.renameTo(newFile);
-    }
-
     File getFIle(){
         return file;
     }
 
-    public boolean copy(FileInfo target, boolean delete) {
-        if (isDirectory()) {
-            File newTargetFolder = new File(target.file, file.getName());
-            boolean allCopied = (newTargetFolder.exists() || newTargetFolder.mkdirs());
-
-            for (File currentFile : children()) {
-                if (currentFile != null) {
-                    FileInfo fileInfo = new FileInfo(currentFile);
-                    File newTarget = new File(target.file, file.getName());
-
-                    allCopied &= (newTarget.exists() || newTarget.mkdirs()) && fileInfo.copy(new FileInfo(newTarget), delete);
-                }
-            }
-
-            if (delete && allCopied) {
-                delete();
-            }
-
-            return allCopied;
-        } else {
-            boolean copied = copy(file, target.file);
-
-            if (delete && copied) {
-                delete();
-            }
-
-            return copied;
-        }
-    }
-
-    private boolean copy(File source, File destination) {
-        File target = new File(destination, source.getName());
-
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
-
-        try {
-            inputStream = new FileInputStream(source);
-            outputStream = new FileOutputStream(target);
-            byte[] buffer = new byte[1024];
-            int length;
-
-            while ((length = inputStream.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, length);
-            }
-
-            outputStream.flush();
-
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            close(inputStream);
-            close(outputStream);
-        }
-    }
-
-    private void close(Closeable closeable) {
-        try {
-            if (closeable != null) {
-                closeable.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public boolean delete() {
-        if (isDirectory()) {
-            for (File currentFile : children()) {
-                if (currentFile != null) {
-                    FileInfo fileInfo = new FileInfo(currentFile);
-                    fileInfo.delete();
-                }
-            }
-        }
-
-        return file.delete();
-    }
 
     public ArrayList<FileInfo> getImages(){
         ArrayList<FileInfo> tempArr = new ArrayList<>();
         if (isDirectory()){
             for (File currentFile : children()){
                 if (currentFile != null) {
-                    Log.d(TAG, "getImage: currentFile.isDirectory()" + currentFile.isDirectory());
                     FileInfo fileInfo = new FileInfo(currentFile);
-                    Log.d(TAG, "getImage: (fileInfo.isImage()" + fileInfo.isImage());
                     if (fileInfo.isImage()){
                         tempArr.add(fileInfo);
                     }
@@ -197,10 +100,6 @@ public class FileInfo implements Serializable {
         }
     }
 
-    public File parent() {
-        return file.getParentFile();
-    }
-
     public String name() {
         if (cachedName == null) {
             cachedName = file.getName();
@@ -229,6 +128,7 @@ public class FileInfo implements Serializable {
         return cachedPath;
     }
 
+
     public String mimeType() {
         if (cachedMimeType == null) {
             try {
@@ -241,6 +141,14 @@ public class FileInfo implements Serializable {
         }
 
         return cachedMimeType;
+    }
+
+    public String getImageFormat(){
+        if (cachedImageFormat == null) {
+            cachedImageFormat =  path().substring(path().lastIndexOf(".") + 1);
+        }
+
+        return cachedImageFormat;
     }
 
     public boolean isImage() {
@@ -356,7 +264,6 @@ public class FileInfo implements Serializable {
 
             // calculate inSampleSize
             options.inSampleSize = calculateInSampleSize(options, maxSize, maxSize);
-
             // decode bitmap with inSampleSize set
             options.inJustDecodeBounds = false;
 

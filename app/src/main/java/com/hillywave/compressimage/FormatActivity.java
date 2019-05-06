@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -12,56 +14,49 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.text.Format;
 import java.util.ArrayList;
 
-import id.zelory.compressor.Compressor;
+public class FormatActivity extends AppCompatActivity {
 
-
-public class CompressActivity extends AppCompatActivity {
     private TableLayout table;
-    private LinearLayout mainLayout;
     private ArrayList<FileInfo> listOfFiles;
     private ThumbnailLoader thumbnailLoader;
-    private TextView textViewCntImages;
     private String TAG = ".CompressActivity";
-    private String SAVE_DIRECTORY = "/compressfolder";
-    public static final int FOLDER = 123;
-    public static final int FOLDER_REQUEST = 342;
-    private int qualityImage = 80;
+    private String SAVE_DIRECTORY = "/formatfolder";
     private EditText editTextSaveFolder;
-    private Bitmap.CompressFormat compressFormat;
     private String folderSaveName;
-    private ArrayList<FileInfo> listSelected;
     private ProgressDialog dialog;
-    private long sizeAfter = 0;
     private int compressErrors = 0;
+    private Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
+    private String formatName = ".jpeg";
+    private TextView textViewCntImages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compress);
+        setContentView(R.layout.activity_format);
 
-        mainLayout = findViewById(R.id.mainLayout);
         this.thumbnailLoader = new ThumbnailLoader(this.getResources());
 
         File saveDirectory = new File(Environment.getExternalStorageDirectory() + SAVE_DIRECTORY);
         folderSaveName = saveDirectory.getPath();
 
-        dialog = new ProgressDialog(CompressActivity.this);
+        dialog = new ProgressDialog(FormatActivity.this);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setTitle("Зачекайте");
@@ -71,65 +66,36 @@ public class CompressActivity extends AppCompatActivity {
         editTextSaveFolder.setText(saveDirectory.getPath());
         editTextSaveFolder.setOnClickListener(view -> btnSelectFolder());
 
-        Spinner spinner = findViewById(R.id.spinner);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String[] choise = getResources().getStringArray(R.array.format_names);
-                switch (choise[i]) {
-                    case "Стандартний":
-                        compressFormat = null;
-                        break;
-                    case "JPEG":
-                        compressFormat = Bitmap.CompressFormat.JPEG;
-                        break;
-                    case "PNG":
-                        compressFormat = Bitmap.CompressFormat.PNG;
-                        break;
-                    case "WEBP":
-                        compressFormat = Bitmap.CompressFormat.WEBP;
-                        break;
-                    default:
-                        break;
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+        textViewCntImages = findViewById(R.id.textViewCntImage);
 
         Button btnCompress = findViewById(R.id.btnCompress);
         btnCompress.setOnClickListener(v -> {
             dialog.show();
-            Thread t = new Thread(this::compress);
+            Thread t = new Thread(this::format);
             t.start();
         });
 
-        textViewCntImages = findViewById(R.id.textViewCntImage);
-
-        TextView textViewCompressQuality = findViewById(R.id.textViewCompressQuality);
-        SeekBar seekBar = findViewById(R.id.seekBar);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                if (seekBar.getProgress() == 0)
-                    seekBar.setProgress(1);
-                qualityImage = seekBar.getProgress();
-                textViewCompressQuality.setText(seekBar.getProgress() + "");
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+        RadioGroup radioGroup = findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener((radioGroup1, i) -> {
+            switch (radioGroup1.getCheckedRadioButtonId()) {
+                case R.id.radioButtonJPEG:
+                    format = Bitmap.CompressFormat.JPEG;
+                    formatName = ".jpeg";
+                    break;
+                case R.id.radioButtonPNG:
+                    format = Bitmap.CompressFormat.PNG;
+                    formatName = ".png";
+                    break;
+                case R.id.radioButtonWEBP:
+                    format = Bitmap.CompressFormat.WEBP;
+                    formatName = ".webp";
+                    break;
+                default:
+                    break;
 
             }
         });
+
 
         Intent intent = getIntent();
         listOfFiles = (ArrayList<FileInfo>) intent.getSerializableExtra("listoffiles");
@@ -137,10 +103,7 @@ public class CompressActivity extends AppCompatActivity {
         Button btnSelectFolder = findViewById(R.id.btnSelectFolder);
         btnSelectFolder.setOnClickListener(v -> btnSelectFolder());
 
-
         table = findViewById(R.id.tableLayout);
-        //TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT);
-        //table.setLayoutParams(tableParams);
 
         Thread t = new Thread(() -> {
             ArrayList<FileInfo> tempArr = new ArrayList<>();
@@ -174,36 +137,52 @@ public class CompressActivity extends AppCompatActivity {
             else if ((msg.what + 1) >= listOfFiles.size()) {
                 dialog.dismiss();
                 ViewDialog alert = new ViewDialog();
-                alert.showDialog(CompressActivity.this, "Опрацьовано файлів: " + listOfFiles.size(), "Всього помилок: " + compressErrors, "Розмір до стиснення: " + calSize(), "Розмір після стиснення: " + calSizeAfter());
+                alert.showDialog(FormatActivity.this, "Опрацьовано файлів: " + listOfFiles.size(), "Всього помилок: " + compressErrors, "", "");
             }
             return true;
         }
     });
 
-    void compress() {
-
+    void format() {
+        saveFolder();
         File myFile;
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         for (int i = 0; i < listOfFiles.size(); i++) {
             myFile = listOfFiles.get(i).getFIle();
-            File compressFile;
+
             try {
-                if (compressFormat == null) {
-                    compressFile = new Compressor(this).setDestinationDirectoryPath(folderSaveName).setQuality(qualityImage).compressToFile(myFile, myFile.getName());
-                } else {
-                    compressFile = new Compressor(this).setDestinationDirectoryPath(folderSaveName).setQuality(qualityImage).setCompressFormat(compressFormat).compressToFile(myFile, myFile.getName());
-                }
-                if (!compressFile.setLastModified(myFile.lastModified())) {
-                    if (!compressFile.setLastModified(myFile.lastModified()))
+                File formatFile = new File(folderSaveName, myFile.getName().substring(0, myFile.getName().lastIndexOf(".")) + formatName);
+
+                Bitmap bitmap = BitmapFactory.decodeFile(myFile.getAbsolutePath(), bmOptions);
+                FileOutputStream out = new FileOutputStream(formatFile);
+
+                bitmap.compress(format, 100, out);
+
+                out.flush();
+                out.close();
+
+                if (!formatFile.setLastModified(myFile.lastModified())) {
+                    if (!formatFile.setLastModified(myFile.lastModified()))
                         Log.d(TAG, "compress: ERROR setLastModified");
                 }
-                sizeAfter += compressFile.length();
+
             } catch (Exception e) {
                 compressErrors++;
                 e.printStackTrace();
             }
+
             handler.sendEmptyMessage(i + 1);
 
+
         }
+    }
+
+    void saveFolder() {
+        File f = new File(folderSaveName);
+        if (!f.exists()) {
+            f.mkdir();
+        }
+
     }
 
 
@@ -217,7 +196,7 @@ public class CompressActivity extends AppCompatActivity {
             }
             int temp = 0;
             for (int i = 0; i < rowCount; i++) {
-                TableRow row = new TableRow(CompressActivity.this);
+                TableRow row = new TableRow(FormatActivity.this);
                 TableRow.LayoutParams paramsTable = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
                 row.setLayoutParams(paramsTable);
                 for (int j = 0; j < columnCount; j++) {
@@ -244,7 +223,7 @@ public class CompressActivity extends AppCompatActivity {
                 row.setGravity(Gravity.CENTER);
                 table.addView(row);
             }
-            textViewCntImages.setText("Кількість: " + listOfFiles.size() + " Загальний розмір: " + calSize());
+             textViewCntImages.setText("Кількість: " + listOfFiles.size());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -268,41 +247,15 @@ public class CompressActivity extends AppCompatActivity {
 
     }
 
-    private String calSizeAfter() {
-        SpaceFormatter spaceFormatter = new SpaceFormatter();
-        return spaceFormatter.format(sizeAfter);
-    }
-
-    private String calSize() {
-
-        SpaceFormatter spaceFormatter = new SpaceFormatter();
-        long tempSize = 0;
-        for (int i = 0; i < listOfFiles.size(); i++) {
-            tempSize += listOfFiles.get(i).getFIle().length();
-        }
-        return spaceFormatter.format(tempSize);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == 1) {
-
-                assert data != null;
-                listSelected = (ArrayList<FileInfo>) data.getSerializableExtra("result");
-                //Intent intent = new Intent(this, CompressActivity.class);
-                //intent.putExtra("listoffiles", listSelected);
-                //startActivity(intent);
-            } else if (requestCode == 11) {
-                // TODO выбрать ссылку для сохранения
+            if (requestCode == 11) {
                 folderSaveName = data.getStringExtra("resultNameFolder");
                 editTextSaveFolder.setText(folderSaveName);
 
             }
-
-        } else if (resultCode == Activity.RESULT_CANCELED) {
-
         }
     }
 

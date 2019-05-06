@@ -39,7 +39,12 @@ public class FolderAdapter extends BaseListAdapter<FileInfo, FolderAdapter.ViewH
             viewHolder.extension.setText(null);
             viewHolder.extension.setBackgroundResource(android.R.color.transparent);
         } else {
-            viewHolder.size.setText(fileInfo.size());
+            if (fileInfo.isImage()) {
+                viewHolder.size.setText(fileInfo.getImageFormat() + " ");
+                viewHolder.size.append(fileInfo.size());
+            } else {
+                viewHolder.size.setText(fileInfo.size());
+            }
 
             if (fileInfo.isImage()) {
                 thumbnailLoader.load(fileInfo, viewHolder.icon);
