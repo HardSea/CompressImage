@@ -101,12 +101,24 @@ public class LocationDialog {
             dialog.dismiss();
             if (String.valueOf(editTextT.getText()).equals(""))
                 editTextT.setText("0");
+            else
+                editor.putFloat("location_T", Float.parseFloat(String.valueOf(editTextT.getText())));
+
             if (String.valueOf(editTextL.getText()).equals(""))
                 editTextL.setText("0");
+            else
+                editor.putFloat("location_L", Float.parseFloat(String.valueOf(editTextL.getText())));
+
             if (String.valueOf(editTextR.getText()).equals(""))
                 editTextR.setText("0");
+            else
+                editor.putFloat("location_R", Float.parseFloat(String.valueOf(editTextR.getText())));
+
             if (String.valueOf(editTextB.getText()).equals(""))
                 editTextB.setText("0");
+            else
+                editor.putFloat("location_B", Float.parseFloat(String.valueOf(editTextB.getText())));
+
             editor.putInt("location_optionT", Integer.parseInt(String.valueOf(editTextT.getText())));
             editor.putInt("location_optionL", Integer.parseInt(String.valueOf(editTextL.getText())));
             editor.putInt("location_optionR", Integer.parseInt(String.valueOf(editTextR.getText())));

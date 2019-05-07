@@ -47,7 +47,6 @@ public class WatermarkActivity extends AppCompatActivity {
     private ProgressDialog dialog;
     private int compressErrors = 0;
     private Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
-    private String formatName = ".jpeg";
     private TextView textViewCntImages;
 
     @Override
@@ -140,17 +139,70 @@ public class WatermarkActivity extends AppCompatActivity {
     void format() {
         saveFolder();
         File myFile;
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences(LOCATION_SETTING, Context.MODE_PRIVATE);
+
+        float tPercent = prefs.getFloat("location_T", 5);
+        float lPercent = prefs.getFloat("location_L", 5);
+        float rPercent = prefs.getFloat("location_R", 5);
+        float bPercent = prefs.getFloat("location_B", 5);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        Matrix matrix = new Matrix();
+        Paint p = new Paint();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         for (int i = 0; i < listOfFiles.size(); i++) {
             myFile = listOfFiles.get(i).getFIle();
 
             try {
                 File formatFile = new File(folderSaveName, myFile.getName());
-
-                Bitmap bitmap = BitmapFactory.decodeFile(myFile.getAbsolutePath(), bmOptions);
                 FileOutputStream out = new FileOutputStream(formatFile);
 
-                addWatermark(myFile.getAbsolutePath(), watermarkImagePath).compress(format, 100, out);
+                Bitmap bmpOriginal = BitmapFactory.decodeFile(myFile.getAbsolutePath(), options);
+                Bitmap watermark = BitmapFactory.decodeFile(watermarkImagePath, options);
+
+                int h, w;
+                w = bmpOriginal.getWidth();
+                h = bmpOriginal.getHeight();
+
+                float scale = (float) (((float) h * 0.10) / (float) watermark.getHeight());
+                matrix.postScale(scale, scale);
+
+                Bitmap tmpBitmap = Bitmap.createBitmap(watermark, 0, 0, watermark.getWidth(), watermark.getHeight(), matrix, true);
+
+                Bitmap resultBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+
+                Canvas c = new Canvas(resultBitmap);
+
+                c.drawBitmap(bmpOriginal, 0, 0, null);
+
+                //p.setAlpha(127);
+
+
+                switch (Objects.requireNonNull(prefs.getString("locationRB", "RB"))) {
+                    case "LT":
+                        c.drawBitmap(tmpBitmap, (int) (resultBitmap.getWidth() * (lPercent / 100)), (int) (resultBitmap.getWidth() * (tPercent / 100)), p);
+
+                        break;
+                    case "RT":
+                        c.drawBitmap(tmpBitmap, (int) (resultBitmap.getWidth() - tmpBitmap.getWidth() - (resultBitmap.getWidth() * 0.05)), 0, p);
+
+                        break;
+                    case "LB":
+                        c.drawBitmap(tmpBitmap, 0, (int) (resultBitmap.getHeight() - tmpBitmap.getHeight() - (resultBitmap.getWidth() * 0.05)), p);
+
+                        break;
+                    case "RB":
+                        c.drawBitmap(tmpBitmap, (int) (resultBitmap.getWidth() - tmpBitmap.getWidth() - (resultBitmap.getWidth() * 0.05)), (int) (resultBitmap.getHeight() - tmpBitmap.getHeight() - (resultBitmap.getWidth() * 0.05)), p);
+
+                        break;
+                    default:
+                        c.drawBitmap(tmpBitmap, (int) (resultBitmap.getWidth() - tmpBitmap.getWidth() - (resultBitmap.getWidth() * 0.05)), (int) (resultBitmap.getHeight() - tmpBitmap.getHeight() - (resultBitmap.getWidth() * 0.05)), p);
+
+                        break;
+                }
+
+
+                resultBitmap.compress(format, 100, out);
 
                 out.flush();
                 out.close();
@@ -171,122 +223,6 @@ public class WatermarkActivity extends AppCompatActivity {
         }
     }
 
-//
-//    public Bitmap addWatermark(String photoPath, String watermarkPath) {
-//        int w, h;
-//        Canvas c;
-//        Paint paint;
-//        Bitmap bmp, watermark, bmpOriginal;
-//
-//        SharedPreferences prefs = getApplicationContext().getSharedPreferences(LOCATION_SETTING, Context.MODE_PRIVATE);
-//
-//
-//        Matrix matrix;
-//        float scale;
-//        RectF r;
-//
-//        BitmapFactory.Options options = new BitmapFactory.Options();
-//        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-//
-//        bmpOriginal = BitmapFactory.decodeFile(photoPath, options);
-//        watermark = BitmapFactory.decodeFile(watermarkPath, options);
-//
-//        w = bmpOriginal.getWidth();
-//        h = bmpOriginal.getHeight();
-//
-//        bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-//
-//        paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG);
-//
-//
-//        c = new Canvas(bmp);
-//        c.drawBitmap(bmpOriginal, 0, 0, paint);
-//
-//        matrix = new Matrix();
-//        scale = (float) (((float) h * 0.10) / (float) watermark.getHeight());
-//        matrix.postScale(scale, scale);
-//
-////        switch (Objects.requireNonNull(prefs.getString("locationRB", "RB"))) {
-////            case "LT":
-////                r = new RectF(watermark.getWidth(), watermark.getHeight(), 0, 0);
-////
-////                break;
-////            case "RT":
-////                r = new RectF(0, watermark.getHeight(), watermark.getWidth(), 0);
-////
-////                break;
-////            case "LB":
-////                r = new RectF(watermark.getWidth(), 0, 0, watermark.getHeight());
-////
-////                break;
-////            case "RB":
-////                r = new RectF(0, 0, watermark.getWidth(), watermark.getHeight());
-////                break;
-////            default:
-////                r = new RectF(0, 0, watermark.getWidth(), watermark.getHeight());
-////                break;
-////        }
-//
-//        r = new RectF(0, 0, watermark.getWidth(), watermark.getHeight());
-//        matrix.mapRect(r);
-//        switch (Objects.requireNonNull(prefs.getString("locationRB", "RB"))){
-//            case "LT":
-//                matrix.postTranslate(0, 0);
-//                break;
-//            case "RT":
-//                matrix.postTranslate(w - r.width(), 0);
-//                break;
-//            case "LB":
-//                matrix.postTranslate(w - r.width(), h - r.height());
-//                break;
-//            case "RB":
-//                matrix.postTranslate(w - r.width(), h - r.height());
-//                break;
-//            default:
-//                matrix.postTranslate(w - r.width(), h - r.height());
-//                break;
-//        }
-//        matrix.postTranslate(w - r.width(), h - r.height());
-//
-//        c.drawBitmap(watermark, matrix, paint);
-//        watermark.recycle();
-//
-//        return bmp;
-//    }
-
-
-    public static Bitmap addWatermark(String photoPath, String watermarkPath) {
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-
-        Bitmap bmpOriginal = BitmapFactory.decodeFile(photoPath, options);
-        Bitmap watermark = BitmapFactory.decodeFile(watermarkPath, options);
-
-        int h, w;
-        w = bmpOriginal.getWidth();
-        h = bmpOriginal.getHeight();
-
-        Matrix matrix = new Matrix();
-        float scale = (float) (((float) h * 0.10) / (float) watermark.getHeight());
-        matrix.postScale(scale, scale);
-
-        Bitmap tmpBitmap = Bitmap.createBitmap(watermark, 0, 0, watermark.getWidth(),watermark.getHeight(), matrix, true);
-
-        Bitmap resultBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-
-        Canvas c = new Canvas(resultBitmap);
-
-        c.drawBitmap(bmpOriginal, 0, 0, null);
-
-        Paint p = new Paint();
-        //p.setAlpha(127);
-
-        c.drawBitmap(tmpBitmap, 0,0, p);
-
-
-        return resultBitmap;
-    }
 
     void saveFolder() {
         File f = new File(folderSaveName);
