@@ -105,7 +105,7 @@ public class RotationActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 angle = seekBar.getProgress();
-                finalRb.setText((seekBar.getProgress() - 360));
+                finalRb.setText((seekBar.getProgress() - 360) + "");
                 angle = seekBar.getProgress();
 
             }

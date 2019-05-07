@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnWatermark:
                 Intent i4 = new Intent(this, SelectFilesActivity.class);
+                i4.putExtra("request_code", 1);
                 startActivityForResult(i4, 4);
 
                 break;
@@ -96,6 +97,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     assert data != null;
                     listSelected = (ArrayList<FileInfo>) data.getSerializableExtra("result");
                     intent = new Intent(this, FormatActivity.class);
+                    intent.putExtra("listoffiles", listSelected);
+                    startActivity(intent);
+
+                    break;
+
+                case 4:
+                    assert data != null;
+                    listSelected = (ArrayList<FileInfo>) data.getSerializableExtra("result");
+                    intent = new Intent(this, WatermarkActivity.class);
                     intent.putExtra("listoffiles", listSelected);
                     startActivity(intent);
 

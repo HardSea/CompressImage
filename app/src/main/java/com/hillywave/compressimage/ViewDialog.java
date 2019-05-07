@@ -14,7 +14,7 @@ public class ViewDialog {
         final Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
-        dialog.setContentView(R.layout.result_dialog);
+        dialog.setContentView(R.layout.dialog_result);
 
         TextView textView1 = dialog.findViewById(R.id.text_dialog1);
         textView1.setText(cntFiles);
@@ -32,7 +32,7 @@ public class ViewDialog {
         Button dialogButton = dialog.findViewById(R.id.btn_dialog);
         dialogButton.setOnClickListener(v -> {
             dialog.dismiss();
-            activity.finish();
+    //TODO        activity.finish();
         });
 
         dialog.show();

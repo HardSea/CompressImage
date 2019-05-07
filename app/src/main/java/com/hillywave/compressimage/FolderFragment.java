@@ -63,7 +63,7 @@ public class FolderFragment extends Fragment {
     }
 
     @Override
-    @SuppressLint("ClickableViewAccessibility")
+    //  @SuppressLint("ClickableViewAccessibility")
     public final void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -87,6 +87,11 @@ public class FolderFragment extends Fragment {
                         selectFilesActivity.addElement(fileInfo);
                     else
                         selectFilesActivity.removeElement(fileInfo);
+                    if (selectFilesActivity.requestCode == 41) {
+                        adapter.unselectAll();
+                        adapter.updateSelection(fileInfo.toggleSelection());
+                        selectFilesActivity.updateWatermarkImage(fileInfo.path());
+                    }
                 }
 
             } else {
@@ -97,18 +102,25 @@ public class FolderFragment extends Fragment {
                         if (fileInfo.isImage()) {
                             adapter.updateSelection(fileInfo.toggleSelection());
                             selectFilesActivity.addElement(fileInfo);
+                            if (selectFilesActivity.requestCode == 41) {
+                                selectFilesActivity.updateWatermarkImage(fileInfo.path());
+                            }
                         }
                     }
+
                 }
             }
         });
 
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
-            FileInfo fileInfo = (FileInfo) parent.getItemAtPosition(position);
-            if (fileInfo.isDirectory() || fileInfo.isImage()) {
-                adapter.updateSelection(fileInfo.toggleSelection());
-                selectFilesActivity.addElement(fileInfo);
-            }
+            if (selectFilesActivity.requestCode != 41) {
+                FileInfo fileInfo = (FileInfo) parent.getItemAtPosition(position);
+                if (fileInfo.isDirectory() || fileInfo.isImage()) {
+                        adapter.updateSelection(fileInfo.toggleSelection());
+                        selectFilesActivity.addElement(fileInfo);
+                    }
+                }
+
             return true;
         });
 

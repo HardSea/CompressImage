@@ -58,15 +58,11 @@ public class SelectFilesActivity extends AppCompatActivity {
     public static final int GALLERY = 123;
     public static final int REQUEST_CODE_STORAGE_ACCESS = 42;
 
-    private ImageView imageView;
-    public String CAMERA_IMAGE_BUCKET_NAME;
-    public String CAMERA_IMAGE_BUCKET_ID;
-    private String IMAGE_DIRECTORY = "/testfolder";
-    private ArrayList imagesEncodedList;
     private String imageEncoded;
     private ArrayList<FileInfo> listPathSelected;
     public int requestCode;
     private String folderSaveName;
+    private String watermarkFile;
     String TAG = "MainActivity";
 
     @Override
@@ -89,7 +85,8 @@ public class SelectFilesActivity extends AppCompatActivity {
             textViewToolBar.setText("Виберіть зображення");
         } else if (requestCode == 11) {
             textViewToolBar.setText("Виберіть папку");
-
+        } else if (requestCode == 41) {
+            textViewToolBar.setText("Виберіть зображення");
         }
 
         btnSelectImage.setOnClickListener(view -> {
@@ -105,9 +102,13 @@ public class SelectFilesActivity extends AppCompatActivity {
                // }
 
             } else if (requestCode == 11) {
-                Toast.makeText(getApplicationContext(), folderSaveName, Toast.LENGTH_SHORT).show();
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("resultNameFolder", folderSaveName);
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
+            } else if(requestCode == 41){
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("resultWatermarkImgName", watermarkFile);
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             }
@@ -132,7 +133,6 @@ public class SelectFilesActivity extends AppCompatActivity {
 
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.add(R.id.fragmentContainer, storageFragment);
-            Log.d(TAG, "onCreate: add fragment ");
             transaction.addToBackStack(null);
             transaction.commitAllowingStateLoss();
 
@@ -142,14 +142,6 @@ public class SelectFilesActivity extends AppCompatActivity {
 
             addFragment(folderFragment, false);
         }
-
-
-        CAMERA_IMAGE_BUCKET_NAME = Environment.getExternalStorageDirectory().toString() + "/DCIM/Camera";
-        CAMERA_IMAGE_BUCKET_ID = getBucketId(CAMERA_IMAGE_BUCKET_NAME);
-
-
-        File[] externalStorageFiles = ContextCompat.getExternalFilesDirs(this, null);
-        String base = String.format("/Android/data/%s/files", getPackageName());
 
 
     }
@@ -279,6 +271,10 @@ public class SelectFilesActivity extends AppCompatActivity {
 
     }
 
+     void updateWatermarkImage(String path){
+        watermarkFile = path;
+    }
+
     @Override
     public void onBackPressed() {
         if (fragments.size() > 0) {
@@ -300,51 +296,12 @@ public class SelectFilesActivity extends AppCompatActivity {
         }
     }
 
-    public List<String> getCameraImages(Context context) {
-        final String[] projection = {MediaStore.Images.Media.DATA};
-        final String selection = MediaStore.Images.Media.BUCKET_ID + " = ?";
-        final String[] selectionArgs = {CAMERA_IMAGE_BUCKET_ID};
-        final Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                projection,
-                selection,
-                selectionArgs,
-                null);
-        assert cursor != null;
-        ArrayList<String> result = new ArrayList<String>(cursor.getCount());
-        if (cursor.moveToFirst()) {
-            final int dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            do {
-                final String data = cursor.getString(dataColumn);
-                result.add(data);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return result;
-    }
-
-
-    public String getBucketId(String path) {
-        return String.valueOf(path.toLowerCase().hashCode());
-    }
-
-
-    public void testBtn(View view) {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        // Intent galleryIntent = new Intent();
-        // galleryIntent.setType("image/*");
-        // galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(galleryIntent, "Select folder"), GALLERY);
-
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
             if (requestCode == GALLERY) {
 
-                imagesEncodedList = new ArrayList<String>();
                 if (data.getData() != null) {
 
                     Uri mImageUri = data.getData();
