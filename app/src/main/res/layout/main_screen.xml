@@ -60,18 +60,6 @@
         android:textSize="20sp"
         android:background="@drawable/buttonshape" />
 
-    <Button
-        android:id="@+id/btnMultiFunc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:text="Мультивибір"
-        android:textSize="20sp"
-        android:background="@drawable/buttonshape" />
 </LinearLayout>
 
 

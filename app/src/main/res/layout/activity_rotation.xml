@@ -245,11 +245,13 @@
                 android:maxLines="1"
                 android:text="Місце для збереження:"
                 android:textColor="#111" />
+
             <Button
                 android:id="@+id/btnSelectFolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:background="@drawable/image_border"
                 android:text="Вибрати" />
 
 
@@ -275,6 +277,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:layout_weight="1"
+        android:background="@drawable/image_border"
         android:text="Обернути"
         android:textColor="#111"
         android:textSize="18sp" />

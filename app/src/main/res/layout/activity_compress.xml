@@ -61,11 +61,14 @@
                 android:maxLines="1"
                 android:text="Місце для збереження:"
                 android:textColor="#111" />
+
             <Button
                 android:id="@+id/btnSelectFolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:background="@drawable/image_border"
+                android:layout_marginStart="10dp"
                 android:text="Вибрати" />
 
 
@@ -152,11 +155,12 @@
         android:id="@+id/btnCompress"
         android:layout_width="200dp"
         android:layout_height="70dp"
-        android:textSize="18sp"
-        android:layout_weight="1"
-        android:textColor="#111"
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
-        android:text="Стиснути" />
+        android:layout_weight="1"
+        android:background="@drawable/image_border"
+        android:text="Стиснути"
+        android:textColor="#111"
+        android:textSize="18sp" />
 
 </LinearLayout>

@@ -176,27 +176,30 @@ public class WatermarkActivity extends AppCompatActivity {
                 c.drawBitmap(bmpOriginal, 0, 0, null);
 
                 //p.setAlpha(127);
+                Log.d(TAG, "format: " + prefs.getString("locationRB", "RB"));
 
+                Log.d(TAG, "format: " + resultBitmap.getHeight());
+                Log.d(TAG, "format: " + resultBitmap.getHeight() * (lPercent / 100));
 
                 switch (Objects.requireNonNull(prefs.getString("locationRB", "RB"))) {
                     case "LT":
-                        c.drawBitmap(tmpBitmap, (int) (resultBitmap.getWidth() * (lPercent / 100)), (int) (resultBitmap.getWidth() * (tPercent / 100)), p);
+                        c.drawBitmap(tmpBitmap,  (resultBitmap.getWidth() * (lPercent / 100)), resultBitmap.getHeight() * (tPercent / 100), p);
 
                         break;
                     case "RT":
-                        c.drawBitmap(tmpBitmap, (int) (resultBitmap.getWidth() - tmpBitmap.getWidth() - (resultBitmap.getWidth() * 0.05)), 0, p);
+                        c.drawBitmap(tmpBitmap,  (resultBitmap.getWidth() - tmpBitmap.getWidth() - (resultBitmap.getWidth() * (rPercent / 100))), resultBitmap.getHeight() * (tPercent / 100), p);
 
                         break;
                     case "LB":
-                        c.drawBitmap(tmpBitmap, 0, (int) (resultBitmap.getHeight() - tmpBitmap.getHeight() - (resultBitmap.getWidth() * 0.05)), p);
+                        c.drawBitmap(tmpBitmap,  (resultBitmap.getWidth() * (lPercent / 100)), (resultBitmap.getHeight() - tmpBitmap.getHeight() - (resultBitmap.getWidth() * (bPercent / 100))), p);
 
                         break;
                     case "RB":
-                        c.drawBitmap(tmpBitmap, (int) (resultBitmap.getWidth() - tmpBitmap.getWidth() - (resultBitmap.getWidth() * 0.05)), (int) (resultBitmap.getHeight() - tmpBitmap.getHeight() - (resultBitmap.getWidth() * 0.05)), p);
+                        c.drawBitmap(tmpBitmap,  (resultBitmap.getWidth() - tmpBitmap.getWidth() - (resultBitmap.getWidth() * (rPercent / 100))),  (resultBitmap.getHeight() - tmpBitmap.getHeight() - (resultBitmap.getWidth() * (bPercent / 100))), p);
 
                         break;
                     default:
-                        c.drawBitmap(tmpBitmap, (int) (resultBitmap.getWidth() - tmpBitmap.getWidth() - (resultBitmap.getWidth() * 0.05)), (int) (resultBitmap.getHeight() - tmpBitmap.getHeight() - (resultBitmap.getWidth() * 0.05)), p);
+                        c.drawBitmap(tmpBitmap,  (resultBitmap.getWidth() - tmpBitmap.getWidth() - (resultBitmap.getWidth() * (rPercent / 100))),  (resultBitmap.getHeight() - tmpBitmap.getHeight() - (resultBitmap.getWidth() * (bPercent / 100))), p);
 
                         break;
                 }

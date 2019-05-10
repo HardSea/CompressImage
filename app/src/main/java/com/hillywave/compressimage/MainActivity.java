@@ -7,9 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -31,8 +28,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnFormat.setOnClickListener(this);
         Button btnWatermark = findViewById(R.id.btnWatermark);
         btnWatermark.setOnClickListener(this);
-        Button btnMultiFunc = findViewById(R.id.btnMultiFunc);
-        btnMultiFunc.setOnClickListener(this);
 
     }
 
@@ -62,11 +57,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent i4 = new Intent(this, SelectFilesActivity.class);
                 i4.putExtra("request_code", 1);
                 startActivityForResult(i4, 4);
-
-                break;
-            case R.id.btnMultiFunc:
-                Intent i5 = new Intent(this, SelectFilesActivity.class);
-                startActivityForResult(i5, 5);
 
                 break;
         }
