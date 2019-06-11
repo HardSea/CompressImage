@@ -27,9 +27,9 @@ public class StorageAdapter extends BaseListAdapter<String, StorageAdapter.ViewH
 
             SpaceFormatter spaceFormatter = new SpaceFormatter();
 
-            String labelTotal = "Total";
+            String labelTotal = getContext().getString(R.string.text13);
             String total = spaceFormatter.format(totalSpace);
-            String labelAvailable = "Aviable";
+            String labelAvailable = getContext().getString(R.string.text14);
             String available = spaceFormatter.format(availableSpace);
             viewHolder.space.setText(String.format("%s: %s     %s: %s", labelTotal, total, labelAvailable, available));
         } catch (Exception e) {

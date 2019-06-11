@@ -2,20 +2,18 @@ package com.hillywave.compressimage;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FolderAdapter extends BaseListAdapter<FileInfo, FolderAdapter.ViewHolder> {
     private int itemsSelected = 0;
     private final ThumbnailLoader thumbnailLoader;
 
-    public FolderAdapter(Context context) {
+    FolderAdapter(Context context) {
         super(context, R.layout.row_file);
 
         this.thumbnailLoader = new ThumbnailLoader(context.getResources());
@@ -40,7 +38,8 @@ public class FolderAdapter extends BaseListAdapter<FileInfo, FolderAdapter.ViewH
             viewHolder.extension.setBackgroundResource(android.R.color.transparent);
         } else {
             if (fileInfo.isImage()) {
-                viewHolder.size.setText(fileInfo.getImageFormat() + " ");
+                viewHolder.size.setText(fileInfo.getImageFormat());
+                viewHolder.size.append(" ");
                 viewHolder.size.append(fileInfo.size());
             } else {
                 viewHolder.size.setText(fileInfo.size());
@@ -114,62 +113,11 @@ public class FolderAdapter extends BaseListAdapter<FileInfo, FolderAdapter.ViewH
         notifyDataSetChanged();
     }
 
-    public void selectAll() {
-        for (int i = 0; i < getCount(); i++) {
-            FileInfo fileInfo = getItem(i);
-
-            if (fileInfo != null) {
-                fileInfo.select(true);
-            }
-        }
-
-        itemsSelected = getCount();
-        notifyDataSetChanged();
-    }
 
     boolean isSelectionMode() {
         return itemsSelected > 0;
     }
 
-    public int itemsSelected() {
-        return itemsSelected;
-    }
-
-    public boolean allItemsSelected() {
-        return itemsSelected == getCount();
-    }
-
-    public List<FileInfo> selectedItems(boolean onlyFiles) {
-        List<FileInfo> list = new ArrayList<>();
-
-        for (int i = 0; i < getCount(); i++) {
-            FileInfo fileInfo = getItem(i);
-
-            if ((fileInfo != null) && fileInfo.isSelected()) {
-                if (onlyFiles) {
-                    list.addAll(fileInfo.files());
-                } else {
-                    list.add(fileInfo);
-                }
-            }
-        }
-
-        return list;
-    }
-
-    public boolean hasFiles() {
-        for (int i = 0; i < getCount(); i++) {
-            FileInfo fileInfo = getItem(i);
-
-            if ((fileInfo != null) && fileInfo.isSelected()) {
-                if (fileInfo.hasFiles()) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
 
     protected static class ViewHolder {
         public final TextView name;

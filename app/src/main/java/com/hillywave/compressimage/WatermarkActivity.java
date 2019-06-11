@@ -62,8 +62,8 @@ public class WatermarkActivity extends AppCompatActivity {
         dialog = new ProgressDialog(WatermarkActivity.this);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
-        dialog.setTitle("Зачекайте");
-        dialog.setMessage("Триває обробка зображень");
+        dialog.setTitle(getApplicationContext().getString(R.string.text_wait));
+        dialog.setMessage(getApplicationContext().getString(R.string.text_wait2));
 
         editTextSaveFolder = findViewById(R.id.editTextSaveFolder);
         editTextSaveFolder.setText(saveDirectory.getPath());
@@ -126,11 +126,11 @@ public class WatermarkActivity extends AppCompatActivity {
         @Override
         public boolean handleMessage(Message msg) {
             if ((msg.what + 1) < listOfFiles.size())
-                dialog.setMessage("Триває обробка зображень: " + msg.what + "/" + listOfFiles.size());
+                dialog.setMessage(getApplicationContext().getString(R.string.text_wait3, msg.what, listOfFiles.size()));
             else if ((msg.what + 1) >= listOfFiles.size()) {
                 dialog.dismiss();
                 ViewDialog alert = new ViewDialog();
-                alert.showDialog(WatermarkActivity.this, "Опрацьовано файлів: " + listOfFiles.size(), "Всього помилок: " + compressErrors, "", "");
+                alert.showDialog(WatermarkActivity.this, getApplicationContext().getString(R.string.text_files) + listOfFiles.size(), getApplicationContext().getString(R.string.text_errors, compressErrors), "", "");
             }
             return true;
         }
@@ -273,7 +273,7 @@ public class WatermarkActivity extends AppCompatActivity {
                 row.setGravity(Gravity.CENTER);
                 table.addView(row);
             }
-            textViewCntImages.setText("Кількість: " + listOfFiles.size());
+            textViewCntImages.setText(getApplicationContext().getString(R.string.text_size, listOfFiles.size()));
 
         } catch (Exception e) {
             e.printStackTrace();

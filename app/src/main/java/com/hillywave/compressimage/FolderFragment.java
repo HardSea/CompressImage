@@ -1,6 +1,5 @@
 package com.hillywave.compressimage;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -63,7 +61,6 @@ public class FolderFragment extends Fragment {
     }
 
     @Override
-    //  @SuppressLint("ClickableViewAccessibility")
     public final void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -211,126 +208,6 @@ public class FolderFragment extends Fragment {
         selectFilesActivity.addFragment(folderFragment, true);
     }
 
-    private void openFile(FileInfo fileInfo) {
-        try {
-            String type = fileInfo.mimeType();
-            Intent intent = openFileIntent(fileInfo.uri(getContext()), type);
-
-            if (isResolvable(intent)) {
-                startActivity(intent, R.string.open_unable);
-            } else {
-                showMessage(R.string.open_unable);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            showMessage(R.string.open_unable);
-        }
-    }
-
-    private Intent openFileIntent(Uri uri, String type) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(uri, type);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        return intent;
-    }
-
-
-    @SuppressLint("StaticFieldLeak")
-    public void onPaste() {
-        //Clipboard clipboard = mainActivity.clipboard();
-
-//        String message = "";
-
-//        if (clipboard.isCut()) {
-//            message = getString(R.string.clipboard_cut);
-//        } else if (clipboard.isCopy()) {
-//            message = getString(R.string.clipboard_copy);
-//        }
-//
-//        ProgressDialog dialog = Dialogs.progress(getContext(), message);
-//
-//        new AsyncTask<Void, Void, Void>() {
-//            @Override
-//            protected Void doInBackground(Void... params) {
-//                clipboard.paste(new FileInfo(folder()));
-//
-//                return null;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Void result) {
-//                try {
-//                    dialog.dismiss();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//                refreshFolder();
-//            }
-//        }.execute();
-    }
-
-
-    private void createFolder(String name) {
-//        File parent = folder();
-//        File newFolder = new File(parent, name);
-//
-//        if (newFolder.mkdir()) {
-//            refreshFolder();
-//        } else {
-//            showMessage("Create error");
-//        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private void deleteSelected(List<FileInfo> selectedItems) {
-//        ProgressDialog dialog = Dialogs.progress(getContext(), getString(R.string.delete_deleting));
-//
-//        new AsyncTask<Void, Void, Boolean>() {
-//            @Override
-//            protected Boolean doInBackground(Void... params) {
-//                boolean allDeleted = true;
-//
-//                for (FileInfo fileInfo : selectedItems) {
-//                    if (!fileInfo.delete()) {
-//                        allDeleted = false;
-//                    }
-//                }
-//
-//                return allDeleted;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Boolean result) {
-//                try {
-//                    dialog.dismiss();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//                refreshFolder();
-//
-//                if (!result) {
-//                    showMessage("Delete error");
-//                }
-//            }
-//        }.execute();
-    }
-
-    private void renameItem(FileInfo fileInfo, String newName) {
-//        if (fileInfo.rename(newName)) {
-//            refreshFolder();
-//        } else {
-//            showMessage("Rename error");
-//        }
-    }
-
-    private void showMessage(@StringRes int text) {
-        Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
-    }
 
     public void refreshFolder() {
         List<FileInfo> files = fileList();
@@ -345,22 +222,6 @@ public class FolderFragment extends Fragment {
         }
     }
 
-    private void startActivity(Intent intent, @StringRes int resId) {
-        try {
-            startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            showMessage(resId);
-        }
-    }
-
-    private boolean isResolvable(Intent intent) {
-        PackageManager manager = selectFilesActivity.getPackageManager();
-        List<ResolveInfo> resolveInfo = manager.queryIntentActivities(intent, 0);
-
-        return !resolveInfo.isEmpty();
-    }
 
 
 }

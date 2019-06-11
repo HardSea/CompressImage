@@ -37,7 +37,6 @@ public class FormatActivity extends AppCompatActivity {
     private ArrayList<FileInfo> listOfFiles;
     private ThumbnailLoader thumbnailLoader;
     private String TAG = ".CompressActivity";
-    private String SAVE_DIRECTORY = "/formatfolder";
     private EditText editTextSaveFolder;
     private String folderSaveName;
     private ProgressDialog dialog;
@@ -53,6 +52,7 @@ public class FormatActivity extends AppCompatActivity {
 
         this.thumbnailLoader = new ThumbnailLoader(this.getResources());
 
+        String SAVE_DIRECTORY = "/formatfolder";
         File saveDirectory = new File(Environment.getExternalStorageDirectory() + SAVE_DIRECTORY);
         folderSaveName = saveDirectory.getPath();
 
@@ -133,11 +133,11 @@ public class FormatActivity extends AppCompatActivity {
         @Override
         public boolean handleMessage(Message msg) {
             if ((msg.what + 1) < listOfFiles.size())
-                dialog.setMessage("Триває обробка зображень: " + msg.what + "/" + listOfFiles.size());
+                dialog.setMessage(getApplicationContext().getString(R.string.text_wait3,  msg.what,  listOfFiles.size()));
             else if ((msg.what + 1) >= listOfFiles.size()) {
                 dialog.dismiss();
                 ViewDialog alert = new ViewDialog();
-                alert.showDialog(FormatActivity.this, "Опрацьовано файлів: " + listOfFiles.size(), "Всього помилок: " + compressErrors, "", "");
+                alert.showDialog(FormatActivity.this, getApplicationContext().getString(R.string.text_wait2, listOfFiles.size()), getApplicationContext().getString(R.string.text_errors, compressErrors), "", "");
             }
             return true;
         }
@@ -223,7 +223,7 @@ public class FormatActivity extends AppCompatActivity {
                 row.setGravity(Gravity.CENTER);
                 table.addView(row);
             }
-             textViewCntImages.setText("Кількість: " + listOfFiles.size());
+             textViewCntImages.setText(getString(R.string.text_size, listOfFiles.size()));
 
         } catch (Exception e) {
             e.printStackTrace();

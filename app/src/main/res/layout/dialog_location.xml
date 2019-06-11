@@ -128,7 +128,7 @@
             android:id="@+id/cb_autoSize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Автоматично"/>
+            android:text="@string/text12"/>
     </LinearLayout>
 </LinearLayout>
     <Button
@@ -137,7 +137,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
-        android:text="Закрити"
+        android:text="@string/text11"
         android:textColor="#ffffffff" />
 
 </LinearLayout>

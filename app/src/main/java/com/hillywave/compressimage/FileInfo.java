@@ -12,7 +12,6 @@ import java.io.Serializable;
 import java.lang.ref.SoftReference;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.List;
 
 public class FileInfo implements Serializable {
     private final File file;
@@ -31,36 +30,19 @@ public class FileInfo implements Serializable {
     private String cachedImageFormat = null;
     private transient SoftReference<Bitmap> cachedBitmap;
     private boolean isSelected = false;
-    private String TAG = ".CompressActivity";
 
     public FileInfo(File file) {
         this.file = file;
         this.cachedBitmap = new SoftReference<>(null);
     }
 
-    public List<FileInfo> files() {
-        List<FileInfo> result = new ArrayList<>();
-
-        if (isDirectory()) {
-            for (File currentFile : children()) {
-                if (currentFile != null) {
-                    FileInfo fileInfo = new FileInfo(currentFile);
-                    result.addAll(fileInfo.files());
-                }
-            }
-        } else {
-            result.add(this);
-        }
-
-        return result;
-    }
 
     File getFIle(){
         return file;
     }
 
 
-    public ArrayList<FileInfo> getImages(){
+    ArrayList<FileInfo> getImages(){
         ArrayList<FileInfo> tempArr = new ArrayList<>();
         if (isDirectory()){
             for (File currentFile : children()){
@@ -83,7 +65,7 @@ public class FileInfo implements Serializable {
         }
     }
 
-    public boolean hasFiles() {
+    boolean hasFiles() {
         if (isDirectory()) {
             for (File currentFile : children()) {
                 if (currentFile != null) {
@@ -108,17 +90,6 @@ public class FileInfo implements Serializable {
         return cachedName;
     }
 
-    public Uri uri(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            try {
-                return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", file);
-            } catch (Exception e) {
-                return Uri.fromFile(file);
-            }
-        } else {
-            return Uri.fromFile(file);
-        }
-    }
 
     public String path() {
         if (cachedPath == null) {
@@ -129,7 +100,7 @@ public class FileInfo implements Serializable {
     }
 
 
-    public String mimeType() {
+    private String mimeType() {
         if (cachedMimeType == null) {
             try {
                 cachedMimeType = URLConnection.guessContentTypeFromName(file.getAbsolutePath());
@@ -143,7 +114,7 @@ public class FileInfo implements Serializable {
         return cachedMimeType;
     }
 
-    public String getImageFormat(){
+    String getImageFormat(){
         if (cachedImageFormat == null) {
             cachedImageFormat =  path().substring(path().lastIndexOf(".") + 1);
         }
@@ -151,7 +122,7 @@ public class FileInfo implements Serializable {
         return cachedImageFormat;
     }
 
-    public boolean isImage() {
+    boolean isImage() {
         if (cachedIsImage == null) {
             String mimeType = mimeType();
 
@@ -161,7 +132,7 @@ public class FileInfo implements Serializable {
         return cachedIsImage;
     }
 
-    public boolean isPdf() {
+    boolean isPdf() {
         if (cachedIsPdf == null) {
             String mimeType = mimeType();
 
@@ -171,7 +142,7 @@ public class FileInfo implements Serializable {
         return cachedIsPdf;
     }
 
-    public boolean isAudio() {
+    boolean isAudio() {
         if (cachedIsAudio == null) {
             String mimeType = mimeType();
 
@@ -181,7 +152,7 @@ public class FileInfo implements Serializable {
         return cachedIsAudio;
     }
 
-    public boolean isVideo() {
+    boolean isVideo() {
         if (cachedIsVideo == null) {
             String mimeType = mimeType();
 
@@ -191,7 +162,7 @@ public class FileInfo implements Serializable {
         return cachedIsVideo;
     }
 
-    public boolean isDirectory() {
+    boolean isDirectory() {
         if (cachedIsDirectory == null) {
             cachedIsDirectory = file.isDirectory();
         }
@@ -199,7 +170,7 @@ public class FileInfo implements Serializable {
         return cachedIsDirectory;
     }
 
-    public int numberOfChildren() {
+    int numberOfChildren() {
         if (cachedNumberOfChildren == null) {
             cachedNumberOfChildren = children().length;
         }
@@ -213,7 +184,7 @@ public class FileInfo implements Serializable {
         return (children != null) ? children : new File[0];
     }
 
-    public String extension() {
+    String extension() {
         if (cachedExtension == null) {
             cachedExtension = "";
 
@@ -242,7 +213,7 @@ public class FileInfo implements Serializable {
         return cachedSize;
     }
 
-    public boolean hasCachedBitmap() {
+    boolean hasCachedBitmap() {
         if (cachedBitmap != null)
             return (cachedBitmap.get() != null);
         else {
@@ -251,7 +222,7 @@ public class FileInfo implements Serializable {
         }
     }
 
-    public Bitmap bitmap(int maxSize) {
+    Bitmap bitmap(int maxSize) {
         Bitmap bitmap = cachedBitmap.get();
 
         if (bitmap == null) {
@@ -294,17 +265,17 @@ public class FileInfo implements Serializable {
         return inSampleSize;
     }
 
-    public boolean toggleSelection() {
+    boolean toggleSelection() {
         isSelected = !isSelected;
 
         return isSelected;
     }
 
-    public void select(boolean value) {
+    void select(boolean value) {
         isSelected = value;
     }
 
-    public boolean isSelected() {
+    boolean isSelected() {
         return isSelected;
     }
 }

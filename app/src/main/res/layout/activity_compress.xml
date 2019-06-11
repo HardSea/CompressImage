@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:maxLines="1"
-                android:text="Місце для збереження:"
+                android:text="@string/text1"
                 android:textColor="#111" />
 
             <Button
@@ -69,7 +69,7 @@
                 android:layout_gravity="center"
                 android:background="@drawable/image_border"
                 android:layout_marginStart="10dp"
-                android:text="Вибрати" />
+                android:text="@string/text2" />
 
 
         </LinearLayout>
@@ -103,7 +103,7 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Якість стиснення: "
+                android:text="@string/text3"
                 android:maxLines="1"
                 android:textColor="#111" />
 
@@ -138,7 +138,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:maxLines="1"
-            android:text="Формат зображення:"
+            android:text="@string/text4"
             android:textColor="#111" />
 
         <Spinner
@@ -159,7 +159,7 @@
         android:layout_marginBottom="8dp"
         android:layout_weight="1"
         android:background="@drawable/image_border"
-        android:text="Стиснути"
+        android:text="@string/text5"
         android:textColor="#111"
         android:textSize="18sp" />
 

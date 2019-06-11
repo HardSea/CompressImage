@@ -69,8 +69,8 @@ public class RotationActivity extends AppCompatActivity implements View.OnClickL
         dialog = new ProgressDialog(RotationActivity.this);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
-        dialog.setTitle("Зачекайте");
-        dialog.setMessage("Триває обробка зображень");
+        dialog.setTitle(getApplicationContext().getString(R.string.text_wait));
+        dialog.setMessage(getApplicationContext().getString(R.string.text_wait4));
 
         editTextSaveFolder = findViewById(R.id.editTextSaveFolder);
         editTextSaveFolder.setText(saveDirectory.getPath());
@@ -156,11 +156,11 @@ public class RotationActivity extends AppCompatActivity implements View.OnClickL
         @Override
         public boolean handleMessage(Message msg) {
             if ((msg.what + 1) < listOfFiles.size())
-                dialog.setMessage("Триває обробка зображень: " + msg.what + "/" + listOfFiles.size());
+                dialog.setMessage(getApplicationContext().getString(R.string.text_wait3, msg.what, listOfFiles.size()));
             else if ((msg.what + 1) >= listOfFiles.size()) {
                 dialog.dismiss();
                 ViewDialog alert = new ViewDialog();
-                alert.showDialog(RotationActivity.this, "Опрацьовано файлів: " + listOfFiles.size(), "Всього помилок: " + compressErrors, "", "");
+                alert.showDialog(RotationActivity.this, getApplicationContext().getString(R.string.text_files) + listOfFiles.size(), getApplicationContext().getString(R.string.text_errors, compressErrors), "", "");
             }
             return true;
         }
@@ -260,7 +260,7 @@ public class RotationActivity extends AppCompatActivity implements View.OnClickL
                 row.setGravity(Gravity.CENTER);
                 table.addView(row);
             }
-             textViewCntImages.setText("Кількість: " + listOfFiles.size());
+             textViewCntImages.setText(getApplicationContext().getString(R.string.text_size, listOfFiles.size()));
 
         } catch (Exception e) {
             e.printStackTrace();

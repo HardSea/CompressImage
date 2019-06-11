@@ -64,8 +64,8 @@ public class CompressActivity extends AppCompatActivity {
         dialog = new ProgressDialog(CompressActivity.this);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
-        dialog.setTitle("Зачекайте");
-        dialog.setMessage("Триває обробка зображень");
+        dialog.setTitle(getApplicationContext().getString(R.string.text_wait));
+        dialog.setMessage(getApplicationContext().getString(R.string.text_wait2));
 
         editTextSaveFolder = findViewById(R.id.editTextSaveFolder);
         editTextSaveFolder.setText(saveDirectory.getPath());
@@ -170,11 +170,11 @@ public class CompressActivity extends AppCompatActivity {
         @Override
         public boolean handleMessage(Message msg) {
             if ((msg.what + 1) < listOfFiles.size())
-                dialog.setMessage("Триває обробка зображень: " + msg.what + "/" + listOfFiles.size());
+                dialog.setMessage(getApplicationContext().getString(R.string.text_wait3, msg.what, listOfFiles.size()));
             else if ((msg.what + 1) >= listOfFiles.size()) {
                 dialog.dismiss();
                 ViewDialog alert = new ViewDialog();
-                alert.showDialog(CompressActivity.this, "Опрацьовано файлів: " + listOfFiles.size(), "Всього помилок: " + compressErrors, "Розмір до стиснення: " + calSize(), "Розмір після стиснення: " + calSizeAfter());
+                alert.showDialog(CompressActivity.this, getApplicationContext().getString(R.string.text_files) + listOfFiles.size(), getApplicationContext().getString(R.string.text_errors, compressErrors), getApplicationContext().getString(R.string.text_info) + calSize(), getApplicationContext().getString(R.string.text_info2) + calSizeAfter());
             }
             return true;
         }
@@ -244,7 +244,7 @@ public class CompressActivity extends AppCompatActivity {
                 row.setGravity(Gravity.CENTER);
                 table.addView(row);
             }
-            textViewCntImages.setText("Кількість: " + listOfFiles.size() + " Загальний розмір: " + calSize());
+            textViewCntImages.setText(getApplicationContext().getString(R.string.text_wait6, listOfFiles.size()) + getApplicationContext().getString(R.string.text_info4, calSize()));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -295,7 +295,6 @@ public class CompressActivity extends AppCompatActivity {
                 //intent.putExtra("listoffiles", listSelected);
                 //startActivity(intent);
             } else if (requestCode == 11) {
-                // TODO выбрать ссылку для сохранения
                 folderSaveName = data.getStringExtra("resultNameFolder");
                 editTextSaveFolder.setText(folderSaveName);
 

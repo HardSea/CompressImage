@@ -12,7 +12,6 @@
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"
@@ -141,7 +140,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Вибрати" />
+                                android:text="@string/text2" />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -182,7 +181,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="#000"
-                                android:text="Відобразити: "/>
+                                android:text="@string/text7"/>
 
                             <RadioButton
                                 android:id="@+id/radioButton5"
@@ -243,7 +242,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:maxLines="1"
-                android:text="Місце для збереження:"
+                android:text="@string/text1"
                 android:textColor="#111" />
 
             <Button
@@ -252,7 +251,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@drawable/image_border"
-                android:text="Вибрати" />
+                android:text="@string/text2" />
 
 
         </LinearLayout>
@@ -278,7 +277,7 @@
         android:layout_marginBottom="8dp"
         android:layout_weight="1"
         android:background="@drawable/image_border"
-        android:text="Обернути"
+        android:text="@string/text6"
         android:textColor="#111"
         android:textSize="18sp" />
 

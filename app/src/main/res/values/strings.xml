@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">Compress Image</string>
-    <string name="open_unable">Cannot open file</string>
+    <string name="text_wait">Зачекайте</string>
+    <string name="text_wait2">Триває обробка зображень: %1$d </string>
+    <string name="text_files">Опрацьовано файлів: </string>
+    <string name="text_errors">Всього помилок: %1$d </string>
+    <string name="text_info">Розмір до стиснення: </string>
+    <string name="text_info2">Розмір після стиснення: </string>
+    <string name="text_info3">Кількість:</string>
+    <string name="text_info4">" Загальний розмір: %1$s "</string>
+    <string name="text_wait3">Триває обробка зображень: %1$d/%2$d </string>
+    <string name="text_size">Кількість: %1$d </string>
+    <string name="text_wait4">Триває обробка зображень</string>
     <plurals name="itemAmount">
         <item quantity="zero">%d items</item>
         <item quantity="one">1 item</item>
@@ -12,4 +22,28 @@
         <item>PNG</item>
         <item>WEBP</item>
     </string-array>
+    <string name="text_wait6">"Триває обробка зображень:  %1$d "</string>
+    <string name="text1">Місце для збереження:</string>
+    <string name="text2">Вибрати</string>
+    <string name="text3">Якість стиснення:</string>
+    <string name="text4">Формат зображення:</string>
+    <string name="text5">Стиснути</string>
+    <string name="text_jpeg" translatable="false">JPEG</string>
+    <string name="text_png" translatable="false">PNG</string>
+    <string name="text_webp" translatable="false">WEBP</string>
+    <string name="text6">Обернути</string>
+    <string name="text7">Відобразити:</string>
+    <string name="text9">Вибрати зображення</string>
+    <string name="text10">Додати</string>
+    <string name="text11">Закрити</string>
+    <string name="text12">Автоматично</string>
+    <string name="main_text1">Стиснення</string>
+    <string name="main_text2">Обертання</string>
+    <string name="main_text3">Зміна формату</string>
+    <string name="main_text4">Водяний знак</string>
+    <string name="text_select1">Виберіть зображення</string>
+    <string name="text_select2">Виберіть папку</string>
+    <string name="text_request">Додатку необхіден доступ для зчитування файлів</string>
+    <string name="text13">Всього</string>
+    <string name="text14">Доступно</string>
 </resources>

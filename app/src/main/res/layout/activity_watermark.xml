@@ -59,15 +59,14 @@
             android:layout_marginLeft="10dp"
             android:background="@drawable/image_border"
             android:padding="10dp"
-            android:text="Вибрати зображення" />
+            android:text="@string/text9" />
 
         <ImageView
             android:id="@+id/watermarkImage"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:layout_marginStart="10dp"
-            android:contentDescription="watermarkImage" />
+            android:layout_marginStart="10dp"/>
 
         <ImageView
             android:id="@+id/btnSelectLocation"
@@ -102,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:maxLines="1"
-                android:text="Місце для збереження:"
+                android:text="@string/text1"
                 android:textColor="#111" />
 
             <Button
@@ -113,7 +112,7 @@
                 android:layout_marginStart="5dp"
                 android:background="@drawable/image_border"
                 android:padding="10dp"
-                android:text="Вибрати" />
+                android:text="@string/text2" />
 
 
         </LinearLayout>
@@ -141,7 +140,7 @@
         android:layout_weight="1"
         android:background="@drawable/image_border"
         android:padding="10dp"
-        android:text="Обернути"
+        android:text="@string/text10"
         android:textColor="#111"
         android:textSize="18sp" />
 

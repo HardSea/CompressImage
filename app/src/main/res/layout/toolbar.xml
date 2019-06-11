@@ -22,7 +22,7 @@
         android:layout_gravity="end"
         android:layout_margin="10dp"
         android:background="#fff"
-        android:text="Вибрати"/>
+        android:text="@string/text2"/>
 
 
 

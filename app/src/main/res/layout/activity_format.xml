@@ -63,21 +63,21 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="true"
-                android:text="JPEG" />
+                android:text="@string/text_jpeg" />
 
             <RadioButton
                 android:id="@+id/radioButtonPNG"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="PNG" />
+                android:text="@string/text_png" />
 
             <RadioButton
                 android:id="@+id/radioButtonWEBP"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="WEBP" />
+                android:text="@string/text_webp" />
         </RadioGroup>
     </LinearLayout>
 
@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:maxLines="1"
-                android:text="Місце для збереження:"
+                android:text="@string/text1"
                 android:textColor="#111" />
 
             <Button
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@drawable/image_border"
-                android:text="Вибрати" />
+                android:text="@string/text2" />
 
 
         </LinearLayout>
@@ -134,7 +134,7 @@
         android:layout_marginBottom="8dp"
         android:layout_weight="1"
         android:background="@drawable/image_border"
-        android:text="Обернути"
+        android:text="@string/text6"
         android:textColor="#111"
         android:textSize="18sp" />
 

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="format_names">
+        <item>Standart</item>
+        <item>JPEG</item>
+        <item>PNG</item>
+        <item>WEBP</item>
+    </string-array>
+    <string name="app_name">Compress Image </string>
+    <string name="text_wait">Wait</string>
+    <string name="text_wait2">Image processing:  %1$d</string>
+    <string name="text_wait6">Image processing:  %1$d </string>
+    <string name="text_errors">Total errors: %1$d </string>
+    <string name="text_files">Processed files: </string>
+    <string name="text_info">Size before compression: </string>
+    <string name="text_info2">Size after compression: </string>
+    <string name="text_info3">Amount: </string>
+    <string name="text_info4">" Total size: %1$s "</string>
+    <string name="text_wait3">Image processing: %1$d/%2$d </string>
+    <string name="text_size">Amount: %1$d </string>
+    <string name="text_wait4">Image processing </string>
+    <string name="main_text1">Compress</string>
+    <string name="main_text2">Rotation</string>
+    <string name="main_text3">Reformatting</string>
+    <string name="main_text4">Watermark</string>
+    <string name="text1">The location to save:</string>
+    <string name="text10">Add</string>
+    <string name="text11">Close</string>
+    <string name="text12">Automatically</string>
+    <string name="text2">Select</string>
+    <string name="text3">Compression quality:</string>
+    <string name="text4">Image format:</string>
+    <string name="text5">Compress</string>
+    <string name="text6">Rotate</string>
+    <string name="text7">Reflect:</string>
+    <string name="text9">Select an image</string>
+    <string name="text13">Total</string>
+    <string name="text14">Aviable</string>
+    <string name="text_request">The application needs access to read the files</string>
+    <string name="text_select1">Select image</string>
+    <string name="text_select2">Select image</string>
+</resources>
