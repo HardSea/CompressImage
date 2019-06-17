@@ -33,19 +33,14 @@ import id.zelory.compressor.Compressor;
 
 public class CompressActivity extends AppCompatActivity {
     private TableLayout table;
-    private LinearLayout mainLayout;
     private ArrayList<FileInfo> listOfFiles;
     private ThumbnailLoader thumbnailLoader;
     private TextView textViewCntImages;
     private String TAG = ".CompressActivity";
-    private String SAVE_DIRECTORY = "/compressfolder";
-    public static final int FOLDER = 123;
-    public static final int FOLDER_REQUEST = 342;
     private int qualityImage = 80;
     private EditText editTextSaveFolder;
     private Bitmap.CompressFormat compressFormat;
     private String folderSaveName;
-    private ArrayList<FileInfo> listSelected;
     private ProgressDialog dialog;
     private long sizeAfter = 0;
     private int compressErrors = 0;
@@ -55,9 +50,10 @@ public class CompressActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compress);
 
-        mainLayout = findViewById(R.id.mainLayout);
+        LinearLayout mainLayout = findViewById(R.id.mainLayout);
         this.thumbnailLoader = new ThumbnailLoader(this.getResources());
 
+        String SAVE_DIRECTORY = "/compressfolder";
         File saveDirectory = new File(Environment.getExternalStorageDirectory() + SAVE_DIRECTORY);
         folderSaveName = saveDirectory.getPath();
 
@@ -290,7 +286,7 @@ public class CompressActivity extends AppCompatActivity {
             if (requestCode == 1) {
 
                 assert data != null;
-                listSelected = (ArrayList<FileInfo>) data.getSerializableExtra("result");
+                ArrayList<FileInfo> listSelected = (ArrayList<FileInfo>) data.getSerializableExtra("result");
                 //Intent intent = new Intent(this, CompressActivity.class);
                 //intent.putExtra("listoffiles", listSelected);
                 //startActivity(intent);

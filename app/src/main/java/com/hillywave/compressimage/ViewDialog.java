@@ -32,7 +32,7 @@ public class ViewDialog {
         Button dialogButton = dialog.findViewById(R.id.btn_dialog);
         dialogButton.setOnClickListener(v -> {
             dialog.dismiss();
-           activity.finish();
+            activity.finish();
         });
 
         dialog.show();

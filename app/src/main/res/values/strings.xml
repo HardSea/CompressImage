@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Compress Image</string>
+    <string name="app_name">Редактор зображень</string>
     <string name="text_wait">Зачекайте</string>
     <string name="text_wait2">Триває обробка зображень: %1$d </string>
     <string name="text_files">Опрацьовано файлів: </string>

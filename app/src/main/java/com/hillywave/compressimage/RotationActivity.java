@@ -214,9 +214,9 @@ public class RotationActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    void saveFolder(){
+    void saveFolder() {
         File f = new File(folderSaveName);
-        if (!f.exists()){
+        if (!f.exists()) {
             f.mkdir();
         }
 
@@ -260,7 +260,7 @@ public class RotationActivity extends AppCompatActivity implements View.OnClickL
                 row.setGravity(Gravity.CENTER);
                 table.addView(row);
             }
-             textViewCntImages.setText(getApplicationContext().getString(R.string.text_size, listOfFiles.size()));
+            textViewCntImages.setText(getApplicationContext().getString(R.string.text_size, listOfFiles.size()));
 
         } catch (Exception e) {
             e.printStackTrace();

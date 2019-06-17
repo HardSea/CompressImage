@@ -20,7 +20,7 @@ public class StorageFragment extends Fragment {
 
 
     public static StorageFragment newInstance(String[] storagesPath) {
-        
+
         StorageFragment fragment = new StorageFragment();
         Bundle parameters = new Bundle();
         parameters.putStringArray(PARAMETER_STORAGES_PATH, storagesPath);
@@ -36,8 +36,7 @@ public class StorageFragment extends Fragment {
     }
 
     @Override
-    public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.screen_storage, container, false);
 
         listView = view.findViewById(R.id.list);
@@ -46,8 +45,7 @@ public class StorageFragment extends Fragment {
     }
 
     @Override
-    public final void onActivityCreated(Bundle savedInstanceState)
-    {
+    public final void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         adapter = new StorageAdapter(selectFilesActivity);
@@ -61,28 +59,24 @@ public class StorageFragment extends Fragment {
         reload();
     }
 
-    public void reload()
-    {
+    public void reload() {
         adapter.update(Arrays.asList(storages()));
     }
 
-    private String[] storages()
-    {
+    private String[] storages() {
         Bundle extras = getArguments();
 
         return (extras != null) ? extras.getStringArray(PARAMETER_STORAGES_PATH) : new String[0];
     }
 
-    private void openStorage(String storagePath)
-    {
+    private void openStorage(String storagePath) {
         FolderFragment folderFragment = FolderFragment.newInstance(storagePath);
 
         selectFilesActivity.addFragment(folderFragment, true);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState)
-    {
+    public void onSaveInstanceState(Bundle outState) {
         // no call for super(). Bug on API Level > 11.
     }
 }

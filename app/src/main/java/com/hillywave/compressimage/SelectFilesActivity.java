@@ -66,12 +66,12 @@ public class SelectFilesActivity extends AppCompatActivity {
             if (requestCode == 1) {
                 if (listPathSelected.size() > 0) {
 
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("result", listPathSelected);
-                setResult(Activity.RESULT_OK, resultIntent);
-                finish();
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("result", listPathSelected);
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
 
-                 }
+                }
 
             } else if (requestCode == 11) {
                 Intent resultIntent = new Intent();

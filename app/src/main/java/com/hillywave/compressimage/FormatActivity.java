@@ -133,7 +133,7 @@ public class FormatActivity extends AppCompatActivity {
         @Override
         public boolean handleMessage(Message msg) {
             if ((msg.what + 1) < listOfFiles.size())
-                dialog.setMessage(getApplicationContext().getString(R.string.text_wait3,  msg.what,  listOfFiles.size()));
+                dialog.setMessage(getApplicationContext().getString(R.string.text_wait3, msg.what, listOfFiles.size()));
             else if ((msg.what + 1) >= listOfFiles.size()) {
                 dialog.dismiss();
                 ViewDialog alert = new ViewDialog();
@@ -223,7 +223,7 @@ public class FormatActivity extends AppCompatActivity {
                 row.setGravity(Gravity.CENTER);
                 table.addView(row);
             }
-             textViewCntImages.setText(getString(R.string.text_size, listOfFiles.size()));
+            textViewCntImages.setText(getString(R.string.text_size, listOfFiles.size()));
 
         } catch (Exception e) {
             e.printStackTrace();

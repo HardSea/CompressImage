@@ -12,16 +12,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
-public class LocationDialog {
+class LocationDialog {
 
-    public static final String LOCATION_SETTING = "location_setting";
-    RadioButton rb1;
-    RadioButton rb2;
-    RadioButton rb3;
-    RadioButton rb4;
+    private static final String LOCATION_SETTING = "location_setting";
+    private RadioButton rb1;
+    private RadioButton rb2;
+    private RadioButton rb3;
+    private RadioButton rb4;
 
 
-    public void showDialog(Activity activity) {
+    void showDialog(Activity activity) {
         final Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);

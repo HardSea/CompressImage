@@ -10,8 +10,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -183,23 +181,23 @@ public class WatermarkActivity extends AppCompatActivity {
 
                 switch (Objects.requireNonNull(prefs.getString("locationRB", "RB"))) {
                     case "LT":
-                        c.drawBitmap(tmpBitmap,  (resultBitmap.getWidth() * (lPercent / 100)), resultBitmap.getHeight() * (tPercent / 100), p);
+                        c.drawBitmap(tmpBitmap, (resultBitmap.getWidth() * (lPercent / 100)), resultBitmap.getHeight() * (tPercent / 100), p);
 
                         break;
                     case "RT":
-                        c.drawBitmap(tmpBitmap,  (resultBitmap.getWidth() - tmpBitmap.getWidth() - (resultBitmap.getWidth() * (rPercent / 100))), resultBitmap.getHeight() * (tPercent / 100), p);
+                        c.drawBitmap(tmpBitmap, (resultBitmap.getWidth() - tmpBitmap.getWidth() - (resultBitmap.getWidth() * (rPercent / 100))), resultBitmap.getHeight() * (tPercent / 100), p);
 
                         break;
                     case "LB":
-                        c.drawBitmap(tmpBitmap,  (resultBitmap.getWidth() * (lPercent / 100)), (resultBitmap.getHeight() - tmpBitmap.getHeight() - (resultBitmap.getWidth() * (bPercent / 100))), p);
+                        c.drawBitmap(tmpBitmap, (resultBitmap.getWidth() * (lPercent / 100)), (resultBitmap.getHeight() - tmpBitmap.getHeight() - (resultBitmap.getWidth() * (bPercent / 100))), p);
 
                         break;
                     case "RB":
-                        c.drawBitmap(tmpBitmap,  (resultBitmap.getWidth() - tmpBitmap.getWidth() - (resultBitmap.getWidth() * (rPercent / 100))),  (resultBitmap.getHeight() - tmpBitmap.getHeight() - (resultBitmap.getWidth() * (bPercent / 100))), p);
+                        c.drawBitmap(tmpBitmap, (resultBitmap.getWidth() - tmpBitmap.getWidth() - (resultBitmap.getWidth() * (rPercent / 100))), (resultBitmap.getHeight() - tmpBitmap.getHeight() - (resultBitmap.getWidth() * (bPercent / 100))), p);
 
                         break;
                     default:
-                        c.drawBitmap(tmpBitmap,  (resultBitmap.getWidth() - tmpBitmap.getWidth() - (resultBitmap.getWidth() * (rPercent / 100))),  (resultBitmap.getHeight() - tmpBitmap.getHeight() - (resultBitmap.getWidth() * (bPercent / 100))), p);
+                        c.drawBitmap(tmpBitmap, (resultBitmap.getWidth() - tmpBitmap.getWidth() - (resultBitmap.getWidth() * (rPercent / 100))), (resultBitmap.getHeight() - tmpBitmap.getHeight() - (resultBitmap.getWidth() * (bPercent / 100))), p);
 
                         break;
                 }

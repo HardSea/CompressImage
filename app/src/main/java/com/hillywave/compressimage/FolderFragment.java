@@ -1,12 +1,7 @@
 package com.hillywave.compressimage;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -15,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -113,10 +107,10 @@ public class FolderFragment extends Fragment {
             if (selectFilesActivity.requestCode != 41) {
                 FileInfo fileInfo = (FileInfo) parent.getItemAtPosition(position);
                 if (fileInfo.isDirectory() || fileInfo.isImage()) {
-                        adapter.updateSelection(fileInfo.toggleSelection());
-                        selectFilesActivity.addElement(fileInfo);
-                    }
+                    adapter.updateSelection(fileInfo.toggleSelection());
+                    selectFilesActivity.addElement(fileInfo);
                 }
+            }
 
             return true;
         });
@@ -221,7 +215,6 @@ public class FolderFragment extends Fragment {
             labelNoItems.setVisibility(View.GONE);
         }
     }
-
 
 
 }

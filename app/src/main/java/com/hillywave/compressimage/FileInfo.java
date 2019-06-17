@@ -1,11 +1,7 @@
 package com.hillywave.compressimage;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Build;
-import android.support.v4.content.FileProvider;
 
 import java.io.File;
 import java.io.Serializable;
